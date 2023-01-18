@@ -234,7 +234,7 @@ export default {
         {
           text: this.$t('breadcrumb.countries.title'),
           disabled: false,
-          href: '/countries',
+          href: '/countries/show-all',
         },
         {
           text: this.$t('breadcrumb.countries.edit'),
@@ -319,7 +319,7 @@ export default {
         this.data.phone_code = res.data.data.phone_code
 
         // ******** Start:: Set Continent Data
-        this.data.continent = this.continents.filter(
+        this.data.continent = this.continents.find(
           (el) => el.id == res.data.data.continent,
         )
 

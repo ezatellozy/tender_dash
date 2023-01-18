@@ -308,15 +308,8 @@ export default {
       }).then((res) => {
         this.data.ar.name = res.data.data.ar.name
         this.data.en.name = res.data.data.en.name
-
         this.data.ar.slug = res.data.data.ar.slug
         this.data.en.slug = res.data.data.en.slug
-
-        this.data.area = res.data.data.area
-
-        this.data.shipping_price = res.data.data.shipping_price
-        this.data.is_shapping = res.data.data.is_shapping
-
         this.data.postal_code = res.data.data.postal_code
         this.data.short_name = res.data.data.short_name
 

@@ -321,7 +321,7 @@ export default {
     getData() {
       this.$axios({
         method: 'GET',
-        url: `countries_without_pagination`,
+        url: `countries`,
       }).then((res) => {
         this.countries = res.data.data.map((item) => {
           return {

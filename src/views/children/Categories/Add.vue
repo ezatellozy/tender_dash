@@ -212,7 +212,7 @@ export default {
 
       this.$axios({
         method: 'POST',
-        url: 'category',
+        url: 'categories',
         data: submit_data,
       })
         .then(() => {

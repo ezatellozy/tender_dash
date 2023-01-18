@@ -26,8 +26,6 @@
         :search="search"
         :loading="lodaing"
         :loading-text="$t('table.loadingData')"
-        v-model="selected"
-        show-select
         :single-select="singleSelect"
         item-key="id"
         :items-per-page="paginations.items_per_page"
@@ -37,14 +35,6 @@
         <!-- avatar -->
         <template v-slot:[`item.image`]="{ item }">
           <img @click="show_model_1" class="image" :src="item.image" />
-        </template>
-        <template v-slot:[`item.is_shapping`]="{ item }">
-          <span
-            class="status"
-            :class="item.is_shapping ? 'success' : 'canceled'"
-          >
-            {{ item.is_shapping ? 'نعم' : 'لا' }}
-          </span>
         </template>
 
         <!-- Select no data State -->
@@ -136,17 +126,8 @@
     <!-- Start Pagination -->
     <template>
       <div
-        class="pagination_container text-center mb-5 d-flex justify-content-between"
+        class="pagination_container text-center mb-5 d-flex justify-content-end"
       >
-        <div class="select-pagination d-flex">
-          <span class="first">{{ $t('show') }}</span>
-          <v-select
-            :items="[5, 20, 50, 100]"
-            v-model="paginations.items_per_page"
-          ></v-select>
-          <span>{{ $t('entries') }}</span>
-        </div>
-
         <v-pagination
           v-model.number="paginations.current_page"
           :length="paginations.last_page"
@@ -247,9 +228,15 @@ export default {
       if (this.lang == 'ar') {
         return [
           {
-            text: 'اسم المدينة',
+            text: '  اسم المدينة عربي',
             align: 'center',
-            value: 'name',
+            value: 'ar.name',
+            sortable: false,
+          },
+          {
+            text: '  اسم المدينة انجليزي',
+            align: 'center',
+            value: 'en.name',
             sortable: false,
           },
           {
@@ -258,16 +245,11 @@ export default {
             value: 'country.name',
             sortable: false,
           },
+
           {
-            text: 'متاح للشحن',
+            text: 'الاسم المختصر',
             align: 'center',
-            value: 'is_shapping',
-            sortable: false,
-          },
-          {
-            text: 'تكلفة الشحن',
-            align: 'center',
-            value: 'shipping_price',
+            value: 'short_name',
             sortable: false,
           },
 

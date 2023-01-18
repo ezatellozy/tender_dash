@@ -1,7 +1,12 @@
 <template>
   <div class="wrraper">
     <!-- Start Breadcrumb -->
-    <Breadcrumb :items="items" />
+    <Breadcrumb
+      :items="items"
+      search_route="/countries/add"
+      search_title="إضافه دولة جديدة"
+      icon="fa-plus"
+    />
     <!-- End Breadcrumb -->
 
     <!-- Start Statistics Card-->
@@ -98,17 +103,8 @@
         <!-- Start Pagination -->
         <template>
           <div
-            class="pagination_container text-center mb-5 d-flex justify-content-between"
+            class="pagination_container text-center mb-5 d-flex justify-content-end"
           >
-            <div class="select-pagination d-flex">
-              <span class="first">{{ $t('show') }}</span>
-              <v-select
-                :items="[5, 20, 50, 100]"
-                v-model="paginations.items_per_page"
-              ></v-select>
-              <span>{{ $t('entries') }}</span>
-            </div>
-
             <v-pagination
               v-model.number="paginations.current_page"
               :length="paginations.last_page"

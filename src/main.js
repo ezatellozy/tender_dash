@@ -23,7 +23,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios // Glopal variable
 
 // Global Headers
-axios.defaults.baseURL = 'https://gomla.phpv8.aait-d.com/public/api/dashboard/' // baseurl
+axios.defaults.baseURL = 'http://tender-api.counterattack.top/api/dashboard/' // baseurl
 axios.defaults.headers.common['cache-control'] = 'no-cache'
 axios.defaults.headers.common['Accept'] = 'application/json'
 axios.defaults.headers.common['Accept-language'] = CURRENT_LANG

@@ -126,6 +126,7 @@ export default {
         data: submit_data,
       })
         .then((res) => {
+          console.log(res)
           const data = {
             userId: res.data.data.id,
             token: res.data.data.token,
@@ -147,7 +148,7 @@ export default {
         .catch((err) => {
           this.$iziToast.error({
             timeout: 2000,
-            message: err.response.data.messages,
+            message: err.response?.data.message,
             position: 'bottomRight',
           })
 

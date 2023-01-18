@@ -459,7 +459,7 @@ export default {
         this.loaderPage = false
         this.data.image.src = res.data.data.avatar
 
-        this.data.name = res.data.data.fullname
+        this.data.name = res.data.data.name
         this.data.phone = res.data.data.phone
         this.data.email = res.data.data.email
         this.data.gender = this.genders.find(
@@ -469,40 +469,6 @@ export default {
           (country) => country.phone_code == res.data.data.phone_code,
         )
 
-        // this.data.phone_code = res.data.data.phone_code
-        // Start:: Set Phone Code
-        // this.data.phone_code = this.countries.find(
-        //   (item) => item.phoneCode == res.data.data.phone_code,
-        // )
-        // End:: Set Phone Code
-
-        // Start:: Set Gender
-        // if (res.data.data.gender == 'male') {
-        //   this.data.gender = {
-        //     id: 'male',
-        //     name: this.$t('male'),
-        //   }
-        // } else if (res.data.data.gender == 'female') {
-        //   this.data.gender = {
-        //     id: 'female',
-        //     name: this.$t('female'),
-        //   }
-        // }
-
-        // End:: Set Gender
-        // this.data.country = {
-        //   id: res.data.data.country.id,
-        //   name: res.data.data.country.ar.name,
-        // }
-        // this.data.city = {
-        //   id: res.data.data.city.id,
-        //   name: res.data.data.city.ar.name,
-        // }
-        // this.getCities()
-        // this.data.is_ban = res.data.data.is_ban
-        // this.data.is_active = res.data.data.is_active
-        // this.data.is_admin_active_user = res.data.data.is_admin_active_user
-        // this.data.ban_reason = res.data.data.ban_reason
         this.loaderPage = false
       })
     },

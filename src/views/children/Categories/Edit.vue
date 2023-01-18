@@ -210,7 +210,7 @@ export default {
 
       this.$axios({
         method: 'POST',
-        url: `category/${this.id}`,
+        url: `categories/${this.id}`,
         data: submit_data,
       })
         .then(() => {
@@ -238,7 +238,7 @@ export default {
       this.loading = true
       this.$axios({
         method: 'GET',
-        url: `category/${this.id}`,
+        url: `categories/${this.id}`,
       }).then((res) => {
         this.loading = false
         this.data.image = res.data.data.image

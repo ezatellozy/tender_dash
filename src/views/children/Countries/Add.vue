@@ -224,7 +224,7 @@ export default {
         {
           text: this.$t('breadcrumb.countries.title'),
           disabled: false,
-          href: '/countries',
+          href: '/countries/show-all',
         },
         {
           text: this.$t('breadcrumb.countries.add'),

@@ -340,7 +340,7 @@ export default {
     deleteItemConfirm() {
       this.$axios({
         method: 'DELETE',
-        url: `category/${this.itemtoDelete.id}`,
+        url: `categories/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
@@ -398,7 +398,7 @@ export default {
       this.loading = true
       this.$axios({
         method: 'GET',
-        url: 'category',
+        url: 'categories',
         params: { page: this.paginations.current_page },
       })
         .then((res) => {

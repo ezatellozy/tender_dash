@@ -95,12 +95,12 @@
             <!-- Notifications -->
             <li
               class="notification_list_item"
-              v-if="notifications.length"
+              v-if="notifications"
               @click.stop="toggle_notification_menu"
             >
               <div class="notification_icon">
                 <i class="far fa-bell"></i>
-                <span v-if="unreadNotifCount > 0" class="notificationNumber">
+                <span class="notificationNumber text-white">
                   {{ unreadNotifCount }}
                 </span>
               </div>
@@ -200,9 +200,10 @@ export default {
   },
   methods: {
     getNotifications() {
-      this.$axios.get('notification').then((data) => {
+      this.$axios.get('notifications').then((data) => {
         this.notifications = data.data.data
-        this.unreadNotifCount = this.notifications.length
+
+        this.unreadNotifCount = data.data.meta.total
       })
     },
     getUserData() {
