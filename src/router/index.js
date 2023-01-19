@@ -217,6 +217,33 @@ window.rootRouter = router = new VueRouter({
           ],
         },
         // ========== End profile ==========
+        // ========== Start Tenders ==========
+        {
+          path: '/tenders',
+          component: () => import('@/views/children/Tenders/Home.vue'),
+          children: [
+            // Show All
+            {
+              path: 'show-all',
+              name: 'AllTenders',
+              component: () => import('@/views/children/Tenders/ShowAll.vue'),
+            },
+            // Add
+            {
+              path: 'add',
+              name: 'AddTenders',
+              component: () => import('@/views/children/Tenders/Add.vue'),
+            },
+            // Edit
+            {
+              path: 'edit/:id',
+              name: 'EditTenders',
+              component: () => import('@/views/children/Tenders/Edit.vue'),
+              props: true,
+            },
+          ],
+        },
+        // ========== End Tenders ==========
         // ========== Start Countries ==========
         {
           path: '/countries',

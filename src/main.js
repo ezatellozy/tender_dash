@@ -22,6 +22,10 @@ const CURRENT_LANG = store.getters['lang_module/lang']
 import axios from 'axios'
 Vue.prototype.$axios = axios // Glopal variable
 
+import GlobalService from './helpers/services'
+
+Vue.prototype.$globalServices = new GlobalService() // Glopal variable
+
 // Global Headers
 axios.defaults.baseURL = 'http://tender-api.counterattack.top/api/dashboard/' // baseurl
 axios.defaults.headers.common['cache-control'] = 'no-cache'
