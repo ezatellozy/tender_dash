@@ -69,7 +69,11 @@ export default class GlobalStore {
             }
           }
         } else {
-          if (item != 'is_active' && item != 'is_ban') {
+          if (
+            item != 'is_active' &&
+            item != 'is_ban' &&
+            item != 'is_admin_active_user'
+          ) {
             submit_data.append(item, value)
           }
         }
@@ -80,6 +84,9 @@ export default class GlobalStore {
       if (item == 'is_active') {
         submit_data.append(item, +value)
       }
+      if (item == 'is_admin_active_user') {
+        submit_data.append(item, +value)
+      }
     }
     return axios({
       method: 'POST',
@@ -87,7 +94,7 @@ export default class GlobalStore {
       data: submit_data,
     })
       .then((res) => {
-        if (res.data.status == 'success') {
+        if (res.data.status == 'success' || res.data.status == true) {
           iziToast.success({
             timeout: 2000,
             message: i18n.t('addSuccess'),
@@ -98,9 +105,13 @@ export default class GlobalStore {
       })
       .catch((err) => {
         if (err.response) {
+          let message = ''
+          err.response.data.message
+            ? (message = err.response.data.message)
+            : (message = err.response.data.messages)
           iziToast.error({
             timeout: 2000,
-            message: err.response.data.message,
+            message: message,
             position: 'bottomRight',
           })
         }

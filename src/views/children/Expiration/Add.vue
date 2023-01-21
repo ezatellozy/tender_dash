@@ -73,7 +73,6 @@
             </div>
             <!-- End:: title-->
             <!-- Start:: company_name -->
-
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <input
@@ -92,82 +91,44 @@
             </div>
             <!-- End:: company_name-->
 
-            <!-- Start:: tender_specifications_value -->
+            <!-- Start:: product_name -->
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   @input="
                     helper_checkIfInputIsEmpty
                     addDataLocalStorage()
                   "
-                  v-model.trim="data.tender_specifications_value"
+                  v-model.trim="data.product_name"
                 />
                 <label for="name_input" class="form-label">
-                  قيمة مواصفات المزاد
+                  اسم المنتج
                 </label>
               </div>
             </div>
-            <!-- End:: tender_specifications_value-->
+            <!-- End:: product_name-->
 
-            <!-- Start:: insurance_value -->
+            <!-- Start:: Types -->
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
-                <input
-                  type="number"
-                  class="form-control"
-                  @input="
-                    helper_checkIfInputIsEmpty
-                    addDataLocalStorage()
-                  "
-                  v-model.trim="data.insurance_value"
-                />
-                <label for="name_input" class="form-label">
-                  قيمة التأمين
+                <label class="form-label">
+                  {{ $t('forms.labels.type') }}
                 </label>
+                <multiselect
+                  v-model="data.type"
+                  :options="types"
+                  label="name"
+                  track-by="id"
+                  placeholder=" "
+                  :searchable="true"
+                  :allow-empty="false"
+                  :show-labels="false"
+                ></multiselect>
               </div>
             </div>
-            <!-- End:: insurance_value-->
-            <!-- START:: FILE INPUT -->
-            <div class="col-lg-6 py-0">
-              <div class="input_wrapper top_label file_input">
-                <span class="file_input_label">ارفاق ملف مواصفات المزاد</span>
-                <label
-                  for="file_input"
-                  class="form-label"
-                  v-if="!data.selectedFile.name"
-                >
-                  اختار ملف
-                </label>
-                <label
-                  for="file_input"
-                  class="form-label"
-                  v-if="data.selectedFile.name"
-                >
-                  {{ data.selectedFile.name }}
-                </label>
-                <div class="_actions" v-if="data.selectedFile.path">
-                  <v-icon
-                    class="show"
-                    small
-                    @click="show_model_1(data.selectedFile)"
-                  >
-                    fal fa-eye
-                  </v-icon>
-                </div>
-
-                <input
-                  accept="application/pdf"
-                  type="file"
-                  class="form-control"
-                  placeholder="اختار ملف"
-                  id="file_input"
-                  @change="handelSelectedFile"
-                />
-              </div>
-            </div>
-            <!-- END:: FILE INPUT -->
+            <!-- End:: Types -->
             <!-- START:: DATE PICKER INPUT -->
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label date_input">
@@ -221,7 +182,7 @@
 
             <div class="col-12">
               <div class="input_wrapper top_label">
-                <label class="form-label">صور المزاد</label>
+                <label class="form-label">صور التوالف</label>
                 <div class="row">
                   <div
                     class="col-lg-6 py-0 mb-4"
@@ -232,7 +193,7 @@
                       <div class="col-11">
                         <uplode-image
                           @inputChanged="uplodeImg($event, index)"
-                          placeHolder="صور المزاد"
+                          placeHolder="صور التالف"
                         ></uplode-image>
                       </div>
 
@@ -374,12 +335,12 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.tenders.title'),
+          text: this.$t('breadcrumb.expirations.title'),
           disabled: false,
-          href: '/tenders/show-all',
+          href: '/expirations/show-all',
         },
         {
-          text: this.$t('breadcrumb.tenders.add'),
+          text: this.$t('breadcrumb.expirations.add'),
           disabled: true,
           href: '',
         },
@@ -394,15 +355,10 @@ export default {
         category_ids: null,
         title: null,
         desc: null,
+        product_name: null,
         expiry_date: null,
         company_name: null,
-        tender_specifications_value: null,
-        insurance_value: null,
-        selectedFile: {
-          name: null,
-          path: null,
-          file: null,
-        },
+        type: null,
         tender_images: [
           {
             image: null,
@@ -423,6 +379,13 @@ export default {
         show_model: false,
         model_img_src: '',
       },
+      types: [
+        {
+          id: 'liquidation',
+          name: 'تصفية',
+        },
+        { id: 'expiration', name: 'منتهي' },
+      ],
       clients: [],
       categories: [],
     }
@@ -445,12 +408,12 @@ export default {
       return current >= new Date()
     },
     addDataLocalStorage() {
-      localStorage.setItem('tender_data', JSON.stringify(this.data))
+      localStorage.setItem('expirations_data', JSON.stringify(this.data))
     },
 
     getDataLocalStorage() {
-      if (localStorage.getItem('tender_data')) {
-        this.data = JSON.parse(localStorage.getItem('tender_data'))
+      if (localStorage.getItem('expirations_data')) {
+        this.data = JSON.parse(localStorage.getItem('expirations_data'))
       }
     },
     show_model_1(e) {
@@ -485,6 +448,14 @@ export default {
         })
         this.btnIsLoading = false
         return
+      } else if (!this.data.product_name) {
+        this.$iziToast.error({
+          timeout: 2000,
+          message: 'حقل اسم المنتج مطلوب',
+          position: 'bottomRight',
+        })
+        this.btnIsLoading = false
+        return
       } else if (!this.data.category_ids) {
         this.$iziToast.error({
           timeout: 2000,
@@ -493,10 +464,10 @@ export default {
         })
         this.btnIsLoading = false
         return
-      } else if (!this.data.selectedFile.file) {
+      } else if (!this.data.type) {
         this.$iziToast.error({
           timeout: 2000,
-          message: 'ملف مواصفات المزاد مطلوب',
+          message: 'حقل النوع مطلوب',
           position: 'bottomRight',
         })
         this.btnIsLoading = false
@@ -514,7 +485,7 @@ export default {
       if (!this.data.tender_images[0].image) {
         this.$iziToast.error({
           timeout: 2000,
-          message: 'حقل صوره المزاد مطلوب',
+          message: 'حقل صوره التالف مطلوب',
           position: 'bottomRight',
         })
         this.btnIsLoading = false
@@ -522,11 +493,7 @@ export default {
       }
       this.submitData()
     },
-    handelSelectedFile(e) {
-      this.data.selectedFile.file = e.target.files[0]
-      this.data.selectedFile.name = e.target.files[0].name
-      this.data.selectedFile.path = URL.createObjectURL(e.target.files[0])
-    },
+
     handelOtherFile(e, index) {
       this.data.tender_other_files[index].file = e.target.files[0]
       this.data.tender_other_files[index].name = e.target.files[0].name
@@ -562,41 +529,31 @@ export default {
       this.data.category_ids.map((el, index) =>
         submit_data.append(`category_ids[${index}]`, el.id),
       )
-
       submit_data.append('title', this.data.title)
       submit_data.append('desc', this.data.desc)
       submit_data.append('expiry_date', this.data.expiry_date)
       submit_data.append('company_name', this.data.company_name)
-      submit_data.append(
-        'tender_specifications_value',
-        this.data.tender_specifications_value,
-      )
-      submit_data.append('insurance_value', this.data.insurance_value)
-      if (this.data.selectedFile.file) {
-        submit_data.append(
-          'tender_specifications_file',
-          this.data.selectedFile.file,
-        )
-      }
+      submit_data.append('product_name', this.data.product_name)
+      submit_data.append('type', this.data.type.id)
       this.data.tender_images.map((el, index) => {
         if (el.image) {
-          submit_data.append(`tender_images[${index}]`, el.image?.img_file)
+          submit_data.append(`expiration_images[${index}]`, el.image?.img_file)
         }
       })
       this.data.tender_other_files.map((el, index) => {
         if (el.file) {
-          submit_data.append(`tender_other_files[${index}]`, el.file)
+          submit_data.append(`expiration_files[${index}]`, el.file)
         }
       })
 
       this.$axios({
         method: 'POST',
-        url: 'tenders',
+        url: 'expirations',
         data: submit_data,
       })
         .then(() => {
           // =============== Start:: Remove Form Data From LocalStorage =============== //
-          localStorage.removeItem('tender_data')
+          localStorage.removeItem('expirations_data')
 
           // =============== End:: Remove Form Data From LocalStorage =============== //
           this.$iziToast.success({
@@ -604,7 +561,7 @@ export default {
             message: this.$t('addSuccess'),
             position: 'bottomRight',
           })
-          this.$router.push({ path: '/tenders/show-all' })
+          this.$router.push({ path: '/expirations/show-all' })
           this.btnIsLoading = false
         })
         .catch((err) => {

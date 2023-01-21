@@ -44,8 +44,8 @@
           <!-- ================== You Can use any slots you want ================== -->
           <!-- ====== Select row field ====== -->
           <!-- Image -->
-          <template v-slot:[`item.image`]="{ item }">
-            <img @click="show_model_1" class="image" :src="item.image" />
+          <template v-slot:[`item.avatar`]="{ item }">
+            <img @click="show_model_1" class="image" :src="item.avatar" />
           </template>
 
           <!-- Select no data State -->
@@ -249,12 +249,12 @@ export default {
           {
             text: 'الصورة',
             align: 'center',
-            value: 'image',
+            value: 'avatar',
             sortable: false,
           },
           {
             text: 'الاسم',
-            value: 'fullname',
+            value: 'name',
             align: 'center',
           },
           {
@@ -383,7 +383,7 @@ export default {
       this.loading = true
       this.$axios({
         method: 'GET',
-        url: 'manager',
+        url: 'admins',
         params: { page: this.paginations.current_page },
       })
         .then((res) => {

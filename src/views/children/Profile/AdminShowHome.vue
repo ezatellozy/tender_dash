@@ -2,11 +2,7 @@
   <div class="profile_wrapper most_profile">
     <div
       class="profile_header_wrapper custom_card"
-      :style="`background:${
-        data.userInfo.cover
-          ? `url(${data.userInfo.cover})`
-          : `var(--mainColor-2)`
-      }`"
+      style="background: var(--mainColor-2);"
     >
       <vue-particles
         color="#fff"
@@ -37,11 +33,10 @@
         </div>
 
         <div class="name_wrapper">
-          <h3>
-            <router-link :to="'/users/show/' + data.userInfo.id">
-              {{ data.userInfo.fullname }}
-            </router-link>
+          <h3 class="mb-0">
+            {{ data.userInfo.name }}
           </h3>
+          <p class="mb-0">{{ data.userInfo.email }}</p>
         </div>
       </div>
       <div
@@ -51,18 +46,16 @@
         لا يوجد بيانات
       </div>
     </div>
-    <transition name="fadeInUp" mode="out-in" v-if="data.userInfo.loading">
+    <transition name="fadeInUp" mode="out-in" v-if="data.loading">
       <MainLoader />
     </transition>
 
-    <personal-data v-else :userInfo="data.userInfo" />
-    <!-- <router-view :userInfo="data.userInfo">
-    </router-view> -->
+    <router-view :userInfo="data.userInfo"></router-view>
   </div>
 </template>
 
 <script>
-import PersonalData from "../Profile/UserProfile/children/PersonalData.vue";
+import PersonalData from '../Profile/UserProfile/children/PersonalData.vue'
 export default {
   components: { PersonalData },
   // props: ["id"],
@@ -73,37 +66,37 @@ export default {
         userInfo: null,
         loading: false,
       },
-    };
+    }
   },
 
   methods: {
     getData() {
-      this.data.loading = true;
+      this.data.loading = true
       this.$axios({
-        method: "GET",
+        method: 'GET',
         url: `profile`,
       })
         .then((res) => {
-          this.data.userInfo = res.data.data;
-          this.data.userInfo.loading = false;
-          console.log(this.data.userInfo);
-          this.data.loading = false;
+          this.data.userInfo = res.data.data
+          this.data.userInfo.loading = false
+          console.log(this.data.userInfo)
+          this.data.loading = false
         })
         .catch((err) => {
           this.$iziToast.error({
             timeout: 2000,
             message: err.response.data.message,
-            position: "bottomRight",
-          });
-          this.data.loading = false;
-        });
+            position: 'bottomRight',
+          })
+          this.data.loading = false
+        })
     },
   },
 
   created() {
-    this.getData();
+    this.getData()
   },
-};
+}
 </script>
 
 <style>

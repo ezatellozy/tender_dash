@@ -515,3 +515,28 @@ nav[role="navigation"] {
   padding: 0 !important;
   margin: 0 !important;
 }
+
+
+.productDetails {
+  border: 1px solid var(--mainColor-2);
+  border-radius: 15px;
+  padding-block: 20px;
+
+  &.disabled {
+    cursor: not-allowed;
+
+    h3 {
+      color: gray;
+      font-size: 25px;
+    }
+
+    h4 {
+      font-size: 21px;
+      color: gray;
+    }
+
+    &>* {
+      pointer-events: none;
+    }
+  }
+}

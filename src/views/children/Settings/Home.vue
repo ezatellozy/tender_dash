@@ -38,6 +38,7 @@ export default {
         { name: 'about', path: '/settings/about' },
         { name: 'terms', path: '/settings/terms' },
         { name: 'policy', path: '/settings/policy' },
+        { name: 'whyus', path: '/settings/whyus' },
       ],
     }
   },

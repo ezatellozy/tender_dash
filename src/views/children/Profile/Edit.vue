@@ -20,13 +20,11 @@
         <div class="container">
           <div class="row">
             <div class="col-12 py-0">
-              <upload-image-direct
-                @loading="btnIsLoading1 = $event"
+              <uplode-image
                 @inputChanged="uplodeImg_1"
                 placeHolder="صورة المستخدم"
-                :data_src="data.image.src"
-                :model="model"
-              ></upload-image-direct>
+                :data_src="data.image"
+              ></uplode-image>
               <!-- End:: Image -->
             </div>
             <!-- Start:: Image -->
@@ -64,7 +62,7 @@
             <!-- End:: Email -->
 
             <!-- Start:: gender -->
-            <div class="py-0">
+            <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <label class="form-label">
                   {{ $t('forms.labels.gender') }}
@@ -83,46 +81,34 @@
             </div>
             <!-- End:: gender -->
 
-            <!-- Start:: Phone -->
-            <!-- <div class="col-lg-6 py-0">
-              <div class="input_wrapper top_label">
-                <input
-                  type="number"
-                  class="form-control"
-                  @input="helper_checkIfInputIsEmpty"
-                  v-model.trim="data.phone"
-                />
-                <label for="name_input" class="form-label">
-                  {{ $t("forms.labels.phone") }}
-                </label>
-              </div>
-            </div> -->
-            <!-- End:: Phone -->
-
-            <!-- Start:: Phone Code -->
-            <!-- <div class="col-lg-4 py-0" v-if="countries">
+            <!-- Start:: Country -->
+            <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <label class="form-label">
-                  {{ $t('forms.labels.phone_code') }}
+                  {{ $t('forms.labels.country') }}
                 </label>
                 <multiselect
-                  v-model="data.phone_code"
+                  :loading="!countries.length"
+                  v-model="data.country"
                   :options="countries"
-                  label="phoneCode"
-                  track-by="phoneCode"
+                  label="name"
+                  track-by="id"
                   placeholder=" "
+                  @input="getCities"
                   :searchable="true"
                   :allow-empty="false"
                   :show-labels="false"
                 ></multiselect>
               </div>
-            </div> -->
-            <!-- Start:: Phone Code -->
+            </div>
+            <!-- end:: Country -->
 
-            <!-- Start:: City -->
-            <!-- <div class="col-lg-6 py-0" v-if="cities">
+            <!-- Start:: city -->
+            <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
-                <label class="form-label">{{ $t('forms.labels.city') }}</label>
+                <label class="form-label">
+                  {{ $t('forms.labels.city') }}
+                </label>
                 <multiselect
                   v-model="data.city"
                   :options="cities"
@@ -134,92 +120,46 @@
                   :show-labels="false"
                 ></multiselect>
               </div>
-            </div> -->
-            <!-- Start:: City -->
+            </div>
 
-            <!-- Start:: Gender -->
-            <!-- <div class="col-lg-6 py-0">
+            <!-- end:: city -->
+            <!-- Start:: phone_code -->
+            <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <label class="form-label">
-                  {{ $t('forms.labels.gender') }}
+                  {{ $t('forms.labels.phone_code') }}
                 </label>
                 <multiselect
-                  v-model="data.gender"
-                  :options="genders"
-                  label="name"
+                  :loading="!phone_codes.length"
+                  v-model="data.phone_code"
+                  :options="phone_codes"
+                  label="id"
                   track-by="id"
                   placeholder=" "
-                  :searchable="false"
+                  :searchable="true"
                   :allow-empty="false"
                   :show-labels="false"
                 ></multiselect>
               </div>
-            </div> -->
-            <!-- End:: Gender -->
+            </div>
 
-            <!-- Start:: Is Ban -->
-            <!-- <div class="col-lg-4 py-0">
-              <v-checkbox
-                @change="!data.is_ban ? (data.ban_reason = '') : ''"
-                :label="$t('forms.labels.is_ban')"
-                v-model="data.is_ban"
-                color="success"
-              ></v-checkbox>
-            </div> -->
-            <!-- End:: Is Ban -->
-
-            <!-- Start:: Is Active -->
-            <!-- <div class="col-lg-4 py-0">
-              <v-checkbox
-                :label="$t('forms.labels.is_active')"
-                v-model="data.is_active"
-                color="success"
-              ></v-checkbox>
-            </div> -->
-            <!-- End:: Is Active -->
-
-            <!-- Start:: Is Admin Active User -->
-            <!-- <div class="col-lg-4 py-0">
-              <v-checkbox
-                :label="$t('forms.labels.is_admin_active_user')"
-                v-model="data.is_admin_active_user"
-                color="success"
-              ></v-checkbox>
-            </div> -->
-            <!-- Start:: Is Admin Active User -->
-
-            <!-- Start:: Bio -->
-            <!-- <div class="col-lg-6 py-0">
+            <!-- end:: phone_code -->
+            <!-- Start:: Phone -->
+            <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
-                <label for="textarea_1" class="form-label">{{
-                  $t("forms.labels.bio")
-                }}</label>
-                <textarea
-                  v-model="data.bio"
+                <input
+                  type="number"
+                  min="9"
                   class="form-control"
-                  rows="5"
-                ></textarea>
-              </div>
-            </div> -->
-            <!-- End:: Bio -->
-
-            <!-- Start:: Ban Reason -->
-            <!-- <div class="col-lg-6 py-0">
-              <div
-                class="input_wrapper top_label"
-                :class="{ disabled: !data.is_ban }"
-              >
-                <label for="textarea_1" class="form-label">
-                  {{ $t('forms.labels.ban_reason') }}
+                  @input="helper_checkIfInputIsEmpty"
+                  v-model.trim="data.phone"
+                />
+                <label for="name_input" class="form-label">
+                  {{ $t('forms.labels.phone') }}
                 </label>
-                <textarea
-                  v-model="data.ban_reason"
-                  class="form-control"
-                  rows="5"
-                ></textarea>
               </div>
-            </div> -->
-            <!-- End:: Ban Reason -->
+            </div>
+            <!-- End:: Phone -->
           </div>
         </div>
 
@@ -232,85 +172,7 @@
       </form>
       <!-- ==== End Form ==== -->
       <v-divider></v-divider>
-      <!-- ==== Start Form ==== -->
-      <form @submit.prevent="validateFormUpdatePhone">
-        <div class="container">
-          <h5>تغير الهاتف</h5>
-          <div class="row">
-            <!-- Start:: Phone Code -->
-            <div class="col-lg-4 py-0" v-if="countries">
-              <div class="input_wrapper top_label">
-                <label class="form-label">
-                  {{ $t('forms.labels.phone_code') }}
-                </label>
-                <multiselect
-                  v-model="data.phone_code"
-                  :options="countries"
-                  label="phone_code"
-                  track-by="phone_code"
-                  placeholder=" "
-                  :searchable="true"
-                  :allow-empty="false"
-                  :show-labels="false"
-                ></multiselect>
-              </div>
-            </div>
-            <!-- End:: Phone Code -->
-            <!-- Start:: Phone -->
-            <div class="col-lg-8 py-0">
-              <div class="input_wrapper top_label">
-                <input
-                  type="number"
-                  class="form-control"
-                  @input="helper_checkIfInputIsEmpty"
-                  v-model.trim="data.phone"
-                />
-                <label for="name_input" class="form-label">
-                  {{ $t('forms.labels.phone') }}
-                </label>
-              </div>
-            </div>
-            <!-- End:: Phone -->
-            <template v-if="is_verifaction_send">
-              <div class="col-lg-8 py-0">
-                <div class="input_wrapper top_label">
-                  <input
-                    type="number"
-                    class="form-control"
-                    @input="helper_checkIfInputIsEmpty"
-                    v-model.trim="data.verify_code"
-                  />
-                  <label for="name_input" class="form-label">
-                    {{ $t('forms.labels.verfication_code') }}
-                  </label>
-                </div>
-              </div>
-              <div class="col-lg-4 py-0">
-                <div class="input_wrapper top_label" style="border: none;">
-                  <button
-                    class="button_style_1"
-                    @click="sendVerficationCode"
-                    type="button"
-                    :disabled="btnIsLoading4"
-                  >
-                    إرسال
-                    <span class="btn_loader" v-if="btnIsLoading4"></span>
-                  </button>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
 
-        <div class="buttons_wrapper">
-          <button class="button_style_1" :disabled="btnIsLoading2">
-            {{ $t('forms.submit') }}
-            <span class="btn_loader" v-if="btnIsLoading2"></span>
-          </button>
-        </div>
-      </form>
-      <!-- ==== End Form ==== -->
-      <v-divider></v-divider>
       <!-- ==== Start Form ==== -->
       <form @submit.prevent="validateFormUpdatePassword">
         <div class="container">
@@ -409,11 +271,7 @@ export default {
 
       // ========== create_data
       data: {
-        image: {
-          title: '',
-          src: '',
-        },
-        imagePreview: null,
+        image: null,
         name: null,
         phone: null,
         phone_code: null,
@@ -424,12 +282,6 @@ export default {
         currentPassword: null,
         newPassword: null,
         password_confirmation: null,
-        is_ban: false,
-        is_active: true,
-        is_admin_active_user: false,
-        ban_reason: null,
-        bio: null,
-        verify_code: null,
       },
       // ========== Select Lists Data
       genders: [
@@ -442,8 +294,9 @@ export default {
           name: this.$t('female'),
         },
       ],
-      countries: null,
-      cities: null,
+      countries: [],
+      phone_codes: [],
+      cities: [],
       is_verifaction_send: false,
     }
   },
@@ -457,30 +310,43 @@ export default {
         url: `profile`,
       }).then((res) => {
         this.loaderPage = false
-        this.data.image.src = res.data.data.avatar
-
+        this.data.image = res.data.data.avatar
         this.data.name = res.data.data.name
         this.data.phone = res.data.data.phone
         this.data.email = res.data.data.email
+        this.data.country = res.data.data.country
+        this.getCities(res.data.data.country)
+        this.data.city = res.data.data.city
         this.data.gender = this.genders.find(
           (gender) => gender.id == res.data.data.gender,
         )
-        this.data.phone_code = this.countries.find(
-          (country) => country.phone_code == res.data.data.phone_code,
+        this.data.phone_code = this.phone_codes.find(
+          (code) => code.id == res.data.data.phone_code,
         )
 
         this.loaderPage = false
       })
     },
-
+    getCities(e) {
+      this.data.city = null
+      this.$axios({
+        method: 'GET',
+        // url: `cities`,
+        url: `countries/${e.id}`,
+      }).then((res) => {
+        this.cities = res.data.data.cities.map((item) => {
+          return {
+            id: item.id,
+            name: item.name,
+          }
+        })
+      })
+    },
     // ============ Get Select Lists Data
 
     // Uplode Image
     uplodeImg_1(obj) {
-      this.data.image.title = obj
-    },
-    uplodeImg_qr(obj) {
-      this.data.qr_image = obj
+      this.data.image = obj
     },
 
     // Validate update profile
@@ -495,109 +361,45 @@ export default {
         })
         this.btnIsLoading1 = false
         return
-      }
-      // else if (!this.data.phone) {
-      //   this.$iziToast.error({
-      //     timeout: 2000,
-      //     message: this.$t("forms.validation.phone"),
-      //     position: "bottomRight",
-      //   });
-      //   this.btnIsLoading = false;
-      //   return;
-      // } else if (this.data.phone.length < 9) {
-      //   this.$iziToast.error({
-      //     timeout: 2000,
-      //     message: "رقم الهاتف يجب ان يكون اكبر من 9 ارقام",
-      //     position: "bottomRight",
-      //   });
-      //   this.btnIsLoading = false;
-      //   return;
-      // } else if (this.data.phone.length > 11) {
-      //   this.$iziToast.error({
-      //     timeout: 2000,
-      //     message: "رقم الهاتف يجب ان يكون اقل من 11 رقم",
-      //     position: "bottomRight",
-      //   });
-      //   this.btnIsLoading = false;
-      //   return;
-      // }
-      else if (!this.data.email) {
-        this.$iziToast.error({
-          timeout: 2000,
-          message: this.$t('forms.validation.email'),
-          position: 'bottomRight',
-        })
-        this.btnIsLoading1 = false
-        return
-      } else {
-        this.submitDataProfileUpdate()
-        return
-      }
-    },
-
-    // Submit update profile
-    submitDataProfileUpdate() {
-      const submit_data = new FormData()
-      submit_data.append('_method', 'PATCH')
-      if (this.data.image.title) {
-        submit_data.append('avatar', this.data.image.title)
-      }
-      submit_data.append('fullname', this.data.name)
-      submit_data.append('gender', this.data.gender.id)
-      // submit_data.append('phone_code', this.data.phone_code.phoneCode)
-      submit_data.append('email', this.data.email)
-      // submit_data.append('gender', this.data.gender.id)
-      // if (this.data.password && this.data.password_confirmation) {
-      //   submit_data.append("password", this.data.password);
-      //   submit_data.append(
-      //     "password_confirmation",
-      //     this.data.password_confirmation
-      //   );
-      // }
-      // submit_data.append('is_ban', +this.data.is_ban)
-      // submit_data.append('is_active', +this.data.is_active)
-      // submit_data.append(
-      //   'is_admin_active_user',
-      //   +this.data.is_admin_active_user,
-      // )
-      // if (this.data.is_ban) {
-      //   submit_data.append('ban_reason', this.data.ban_reason)
-      // }
-
-      this.$axios({
-        method: 'POST',
-        url: `update-profile`,
-        data: submit_data,
-      })
-        .then(() => {
-          this.$iziToast.success({
-            timeout: 2000,
-            message: this.$t('editSuccess'),
-            position: 'bottomRight',
-          })
-          // this.$router.push({ path: "/users" });
-          this.btnIsLoading1 = false
-        })
-        .catch((err) => {
-          this.$iziToast.error({
-            timeout: 2000,
-            message: err.response.data.message,
-            position: 'bottomRight',
-          })
-          this.btnIsLoading1 = false
-        })
-    },
-    // Validate update phone
-    validateFormUpdatePhone() {
-      this.btnIsLoading2 = true
-
-      if (!this.data.phone) {
+        // } else if (!this.data.phone_code) {
+        //   this.$iziToast.error({
+        //     timeout: 2000,
+        //     message: this.$t('forms.validation.phone_code'),
+        //     position: 'bottomRight',
+        //   })
+        //   this.btnIsLoading = false
+        //   return
+      } else if (!this.data.phone) {
         this.$iziToast.error({
           timeout: 2000,
           message: this.$t('forms.validation.phone'),
           position: 'bottomRight',
         })
-        this.btnIsLoading2 = false
+        this.btnIsLoading = false
+        return
+      } else if (!this.data.country) {
+        this.$iziToast.error({
+          timeout: 2000,
+          message: this.$t('forms.validation.country'),
+          position: 'bottomRight',
+        })
+        this.btnIsLoading = false
+        return
+      } else if (!this.data.city) {
+        this.$iziToast.error({
+          timeout: 2000,
+          message: this.$t('forms.validation.city'),
+          position: 'bottomRight',
+        })
+        this.btnIsLoading = false
+        return
+      } else if (!this.data.gender) {
+        this.$iziToast.error({
+          timeout: 2000,
+          message: this.$t('forms.validation.gender'),
+          position: 'bottomRight',
+        })
+        this.btnIsLoading = false
         return
       } else if (this.data.phone.length < 9) {
         this.$iziToast.error({
@@ -615,71 +417,48 @@ export default {
         })
         this.btnIsLoading = false
         return
-      } else {
-        this.submitDataPhoneUpdate()
-        return
-      }
-    },
-    //submitDataPhoneUpdate
-    submitDataPhoneUpdate() {
-      const submit_data = new FormData()
-      submit_data.append('_method', 'PATCH')
-      submit_data.append('phone', this.data.phone)
-      submit_data.append('phone_code', this.data.phone_code.phone_code)
-      this.$axios({
-        method: 'POST',
-        url: `edit-phone`,
-        data: submit_data,
-      })
-        .then((res) => {
-          this.$iziToast.success({
-            timeout: 2000,
-            message: res.data.message,
-            position: 'bottomRight',
-          })
-          // this.$router.push({ path: "/users" });
-          this.btnIsLoading2 = false
-          this.is_verifaction_send = true
-        })
-        .catch((err) => {
-          this.$iziToast.error({
-            timeout: 2000,
-            message: err.response.data.message,
-            position: 'bottomRight',
-          })
-          this.btnIsLoading3 = false
-        })
-    },
-    sendVerficationCode() {
-      if (!this.data.verify_code) {
+      } else if (!this.data.email) {
         this.$iziToast.error({
           timeout: 2000,
-          message: this.$t('forms.validation.verfication_code'),
+          message: this.$t('forms.validation.email'),
           position: 'bottomRight',
         })
+        this.btnIsLoading1 = false
+        return
+      } else {
+        this.submitDataProfileUpdate()
         return
       }
-      this.btnIsLoading4 = true
+    },
+
+    // Submit update profile
+    submitDataProfileUpdate() {
       const submit_data = new FormData()
-      submit_data.append('_method', 'PATCH')
-      submit_data.append('phone', this.data.phone)
-      submit_data.append('phone_code', this.data.phone_code.phone_code)
-      submit_data.append('code', this.data.verify_code)
+      // submit_data.append('_method', 'PUT')
+      if (this.data.image.img_file) {
+        submit_data.append('avatar', this.data.image.img_file)
+      }
+      submit_data.append('fullname', this.data.name)
+      submit_data.append('gender', this.data.gender.id)
+      submit_data.append('email', this.data.email)
+      submit_data.append('phone_code', this.data.phone_code?.id)
+      submit_data.append('country_id', this.data.country.id)
+      submit_data.append('city_id', this.data.city.id)
+
       this.$axios({
         method: 'POST',
-        url: `update-phone`,
+        url: `profile`,
         data: submit_data,
       })
-        .then((res) => {
+        .then(() => {
           this.$iziToast.success({
             timeout: 2000,
-            message: res.data.message,
+            message: this.$t('editSuccess'),
             position: 'bottomRight',
           })
+          window.location.reload()
           // this.$router.push({ path: "/users" });
-          this.btnIsLoading4 = false
-          this.is_verifaction_send = false
-          this.getData()
+          this.btnIsLoading1 = false
         })
         .catch((err) => {
           this.$iziToast.error({
@@ -687,9 +466,10 @@ export default {
             message: err.response.data.message,
             position: 'bottomRight',
           })
-          this.btnIsLoading4 = false
+          this.btnIsLoading1 = false
         })
     },
+
     // Validate update password
     validateFormUpdatePassword() {
       this.btnIsLoading3 = true
@@ -726,18 +506,18 @@ export default {
     // submit profile update
     submitDataPasswordUpdate() {
       const submit_data = new FormData()
-      submit_data.append('_method', 'PATCH')
-      submit_data.append('current_password', this.data.currentPassword)
-      submit_data.append('new_password', this.data.newPassword)
-      // submit_data.append('phone_code', this.data.phone_code.phoneCode)
+      // submit_data.append('_method', 'PATCH')
+      submit_data.append('old_password', this.data.currentPassword)
+      submit_data.append('password', this.data.newPassword)
+
       submit_data.append(
-        'new_password_confirmation',
+        'password_confirmation',
         this.data.password_confirmation,
       )
-      // submit_data.append('gender', this.data.gender.id)
+
       this.$axios({
         method: 'POST',
-        url: `update-password`,
+        url: `update_password`,
         data: submit_data,
       })
         .then(() => {
@@ -762,41 +542,24 @@ export default {
         })
     },
 
-    async getCountries() {
-      const res = await this.$axios({
+    getCountries() {
+      this.$axios({
         method: 'GET',
-        url: `https://wasselna.phpv8.aait-d.com/api/general/countries`,
-      })
-
-      this.countries = res.data.data.map((item) => {
-        return {
-          id: item.id,
-          name: item.name,
-          phone_code: item.phone_code,
-        }
+        url: `countries_without_pagination`,
+      }).then((res) => {
+        this.countries = res.data.data.map((item) => {
+          return {
+            id: item.id,
+            name: item.name,
+          }
+        })
+        this.phone_codes = res.data.data.map((item) => {
+          return {
+            id: item.phone_code,
+          }
+        })
       })
     },
-    // getData() {
-    //   this.data.loading = true;
-    //   this.$axios({
-    //     method: "GET",
-    //     url: `profile`,
-    //   })
-    //     .then((res) => {
-    //       this.data.userInfo = res.data.data;
-    //       this.data.userInfo.loading = false;
-    //       console.log(this.data.userInfo);
-    //       this.data.loading = false;
-    //     })
-    //     .catch((err) => {
-    //       this.$iziToast.error({
-    //         timeout: 2000,
-    //         message: err.response.data.message,
-    //         position: "bottomRight",
-    //       });
-    //       this.data.loading = false;
-    //     });
-    // },
   },
 
   async created() {

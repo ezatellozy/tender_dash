@@ -1,10 +1,10 @@
-import Vue from 'vue'
 import axios from 'axios'
 import iziToast from 'izitoast'
 import i18n from '../i18n'
 import 'izitoast/dist/css/iziToast.min.css'
-
-export default class GlobalEdit {
+// Vue.prototype.$iziToast = iziToast // Glopal variable
+// Vue.use(iziToast)
+export default class GlobalEditi {
   submitData({ data }, url) {
     let exeptions = [
       'inputType',
@@ -69,7 +69,13 @@ export default class GlobalEdit {
             }
           }
         } else {
-          if (item != 'is_active' && item != 'is_ban') {
+          if (
+            item != 'is_active' &&
+            item != 'is_ban' &&
+            item != 'avatar' &&
+            item != 'image' &&
+            item != 'is_admin_active_user'
+          ) {
             submit_data.append(item, value)
           }
         }
@@ -78,6 +84,9 @@ export default class GlobalEdit {
         submit_data.append(item, +value)
       }
       if (item == 'is_active') {
+        submit_data.append(item, +value)
+      }
+      if (item == 'is_admin_active_user') {
         submit_data.append(item, +value)
       }
     }
@@ -98,9 +107,13 @@ export default class GlobalEdit {
       })
       .catch((err) => {
         if (err.response) {
+          let message = ''
+          err.response.data.message
+            ? (message = err.response.data.message)
+            : (message = err.response.data.messages)
           iziToast.error({
             timeout: 2000,
-            message: err.response.data.message,
+            message: message,
             position: 'bottomRight',
           })
         }
@@ -108,5 +121,3 @@ export default class GlobalEdit {
       })
   }
 }
-
-Vue.prototype.$globalEdit = new GlobalEdit()

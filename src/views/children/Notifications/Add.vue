@@ -185,24 +185,23 @@ export default {
     // Submit Data
     submitData() {
       const submit_data = new FormData()
-      if (this.data.all) {
+      if (!this.data.all) {
         submit_data.append('user_id', 'all')
         if (this.data.user_list.length) {
-          this.data.user_list.forEach((item, index) => {
-            submit_data.append(`user_list[${index}]`, item.id)
+          this.data.user_list.map((item, index) => {
+            submit_data.append(`user_ids[${index}]`, item.id)
           })
         }
       } else {
         submit_data.append(`user_id`, this.data.clients.id)
-
-        // submit_data.append('user_id', 'all')
       }
+      submit_data.append('all', +this.data.all)
       submit_data.append('title', this.data.title)
       submit_data.append('body', this.data.desc)
 
       this.$axios({
         method: 'POST',
-        url: 'notification',
+        url: 'notifications',
         data: submit_data,
       })
         .then(() => {
@@ -211,7 +210,7 @@ export default {
             message: this.$t('addSuccess'),
             position: 'bottomRight',
           })
-          this.$router.push({ path: '/notifications/all-notifications' })
+          this.$router.push({ path: '/notifications/show-all' })
           this.btnIsLoading = false
         })
         .catch((err) => {
@@ -227,12 +226,12 @@ export default {
     getClients() {
       this.$axios({
         method: 'GET',
-        url: `client`,
+        url: `clients/without-pagination`,
       }).then((res) => {
         this.clients = res.data.data.map((item) => {
           return {
             id: item.id,
-            name: item.fullname,
+            name: item.name,
           }
         })
       })

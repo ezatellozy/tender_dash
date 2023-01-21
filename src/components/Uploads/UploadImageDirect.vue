@@ -245,7 +245,8 @@ export default {
     text-align: center;
     cursor: pointer;
     margin: 10px auto;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     border-radius: 20px;
     display: flex;
     justify-content: center;

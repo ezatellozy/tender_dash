@@ -5,7 +5,7 @@
         <!-- START:: USER DATA-->
         <div class="col-md-4">
           <profile-card
-            :link="`/users/show/${userInfo.id}/data`"
+            :link="`/profile/data`"
             :icon="'fal fa-user'"
             :title="$t('users.personalData.title')"
             :color="'rgb(14 57 88)'"
@@ -20,14 +20,14 @@
 
 <script>
 export default {
-  props: ["userInfo"],
+  props: ['userInfo'],
 
   data() {
-    return {};
+    return {}
   },
 
   methods: {},
-};
+}
 </script>
 
 <style></style>

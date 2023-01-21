@@ -66,7 +66,7 @@
 
       <!-- Image Side -->
       <div class="image">
-        <img src="@/assets/images/pages/login/women.jpg" alt="" />
+        <img src="@/assets/images/pages/login/home.png" alt="" />
       </div>
     </div>
   </div>

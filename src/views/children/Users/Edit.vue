@@ -114,7 +114,7 @@
                   :loading="!phone_codes.length"
                   v-model="data.phone_code"
                   :options="phone_codes"
-                  label="name"
+                  label="id"
                   track-by="id"
                   placeholder=" "
                   :searchable="true"
@@ -204,6 +204,15 @@
             <!-- Start:: Is Active -->
             <div class="col-lg-4 py-0">
               <v-checkbox
+                :label="$t('forms.labels.is_admin_active_user')"
+                v-model="data.is_admin_active_user"
+                color="success"
+              ></v-checkbox>
+            </div>
+            <!-- End:: Is Active -->
+            <!-- Start:: Is Active -->
+            <div class="col-lg-4 py-0">
+              <v-checkbox
                 :label="$t('forms.labels.is_ban')"
                 v-model="data.is_ban"
                 color="error"
@@ -284,6 +293,7 @@ export default {
         gender: null,
         city_id: null,
         is_active: true,
+        is_admin_active_user: true,
         is_ban: false,
         ban_reason: null,
       },
@@ -311,12 +321,15 @@ export default {
         this.data.country_id = res.data.data.country
         this.getCities(this.data.country_id)
         this.data.city_id = res.data.data.city
-        this.data.phone_code = res.data.data.phone_code
-        this.data.gender = this.genders.filter(
+        this.data.phone_code = this.phone_codes.find(
+          (el) => el.id == res.data.data.phone_code,
+        )
+        this.data.gender = this.genders.find(
           (el) => el.id == res.data.data.gender,
         )
         this.data.is_active = res.data.data.is_active
         this.data.is_ban = res.data.data.is_ban
+        this.data.is_admin_active_user = res.data.data.is_admin_active_user
         this.data.ban_reason = res.data.data.ban_reason
       })
     },
@@ -336,7 +349,6 @@ export default {
         this.phone_codes = res.data.data.map((item) => {
           return {
             id: item.phone_code,
-            name: item.phone_code,
           }
         })
       })
@@ -439,60 +451,24 @@ export default {
 
     // Submit Data
     submitData() {
-      const submit_data = new FormData()
-      submit_data.append('_method', 'PUT')
-      if (this.data.avatar.img_file) {
-        submit_data.append('avatar', this.data.avatar.img_file)
-      }
-      submit_data.append('name', this.data.name)
-      submit_data.append('phone', this.data.phone)
-      submit_data.append('country_id', this.data.country_id.id)
-      submit_data.append('city_id', this.data.city_id.id)
-      submit_data.append('email', this.data.email)
-      submit_data.append('gender', this.data.gender)
-      submit_data.append('phone_code', this.data.phone_code)
-      submit_data.append('ban_reason', this.data.ban_reason)
-
-      submit_data.append('is_active', +this.data.is_active)
-      submit_data.append('is_ban', +this.data.is_ban)
-      if (this.data.password) {
-        submit_data.append('password', this.data.password)
-        submit_data.append(
-          'password_confirmation',
-          this.data.password_confirmation,
-        )
-      }
-
-      this.$axios({
-        method: 'POST',
-        url: `client/${this.id}`,
-        data: submit_data,
-      })
-        .then(() => {
-          this.$iziToast.success({
-            timeout: 2000,
-            message: this.$t('editSuccess'),
-            position: 'bottomRight',
-          })
-          this.$router.push({ path: '/users/show-all' })
+      this.$globalEdit
+        .submitData({ data: this.data }, `client/${this.id}`)
+        .then((res) => {
           this.btnIsLoading = false
+          if (res.data.status == false) {
+            return
+          }
+          this.$router.push('/users/show-all')
         })
-        .catch((err) => {
-          this.$iziToast.error({
-            timeout: 2000,
-            message: err.response.data.message,
-            position: 'bottomRight',
-          })
-          this.btnIsLoading = false
-        })
+        .catch(() => (this.btnIsLoading = false))
     },
     getCities(e) {
       this.$axios({
         method: 'GET',
-        url: `cities_without_pagination`,
-        // url: `countries/${e.id}`,
+        // url: `cities_without_pagination`,
+        url: `countries/${e.id}`,
       }).then((res) => {
-        this.cities = res.data.data.map((item) => {
+        this.cities = res.data.data.cities.map((item) => {
           return {
             id: item.id,
             name: item.name,

@@ -4,9 +4,15 @@
     <Breadcrumb :items="items" />
     <!-- End Breadcrumb -->
 
-    <div class="custom_card">
+    <!-- Start Main Loader -->
+    <transition name="fadeInUp" mode="out-in" v-if="loaderPage">
+      <MainLoader />
+    </transition>
+    <!-- End Main Loader -->
+
+    <div class="custom_card" v-else>
       <div class="card-header">
-        <h4 class="card-title">{{ $t('addNew') }}</h4>
+        <h4 class="card-title">{{ $t('edit') }}</h4>
       </div>
 
       <!-- ==== Start Form ==== -->
@@ -92,82 +98,64 @@
             </div>
             <!-- End:: company_name-->
 
-            <!-- Start:: tender_specifications_value -->
+            <!-- Start:: Types -->
+            <div class="col-lg-6 py-0">
+              <div class="input_wrapper top_label">
+                <label class="form-label">
+                  نوع الوكالة
+                </label>
+                <multiselect
+                  v-model="data.agent_type"
+                  :options="agent_types"
+                  label="name"
+                  track-by="id"
+                  placeholder=" "
+                  :searchable="true"
+                  :allow-empty="false"
+                  :show-labels="false"
+                ></multiselect>
+              </div>
+            </div>
+            <!-- End:: Types -->
+            <!-- Start:: Types -->
+            <div class="col-lg-6 py-0">
+              <div class="input_wrapper top_label">
+                <label class="form-label">
+                  {{ $t('forms.labels.type') }}
+                </label>
+                <multiselect
+                  v-model="data.type"
+                  :options="types"
+                  label="name"
+                  track-by="id"
+                  placeholder=" "
+                  :searchable="true"
+                  :allow-empty="false"
+                  :show-labels="false"
+                ></multiselect>
+              </div>
+            </div>
+            <!-- End:: Types -->
+
+            <!-- Start:: product_name -->
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   @input="
                     helper_checkIfInputIsEmpty
                     addDataLocalStorage()
                   "
-                  v-model.trim="data.tender_specifications_value"
+                  v-model.trim="data.product_name"
                 />
                 <label for="name_input" class="form-label">
-                  قيمة مواصفات المزاد
+                  اسم المنتج
                 </label>
               </div>
             </div>
-            <!-- End:: tender_specifications_value-->
+            <!-- End:: product_name-->
 
-            <!-- Start:: insurance_value -->
-            <div class="col-lg-6 py-0">
-              <div class="input_wrapper top_label">
-                <input
-                  type="number"
-                  class="form-control"
-                  @input="
-                    helper_checkIfInputIsEmpty
-                    addDataLocalStorage()
-                  "
-                  v-model.trim="data.insurance_value"
-                />
-                <label for="name_input" class="form-label">
-                  قيمة التأمين
-                </label>
-              </div>
-            </div>
-            <!-- End:: insurance_value-->
-            <!-- START:: FILE INPUT -->
-            <div class="col-lg-6 py-0">
-              <div class="input_wrapper top_label file_input">
-                <span class="file_input_label">ارفاق ملف مواصفات المزاد</span>
-                <label
-                  for="file_input"
-                  class="form-label"
-                  v-if="!data.selectedFile.name"
-                >
-                  اختار ملف
-                </label>
-                <label
-                  for="file_input"
-                  class="form-label"
-                  v-if="data.selectedFile.name"
-                >
-                  {{ data.selectedFile.name }}
-                </label>
-                <div class="_actions" v-if="data.selectedFile.path">
-                  <v-icon
-                    class="show"
-                    small
-                    @click="show_model_1(data.selectedFile)"
-                  >
-                    fal fa-eye
-                  </v-icon>
-                </div>
-
-                <input
-                  accept="application/pdf"
-                  type="file"
-                  class="form-control"
-                  placeholder="اختار ملف"
-                  id="file_input"
-                  @change="handelSelectedFile"
-                />
-              </div>
-            </div>
-            <!-- END:: FILE INPUT -->
             <!-- START:: DATE PICKER INPUT -->
             <div class="col-lg-6 py-0">
               <div class="input_wrapper top_label date_input">
@@ -221,7 +209,7 @@
 
             <div class="col-12">
               <div class="input_wrapper top_label">
-                <label class="form-label">صور المزاد</label>
+                <label class="form-label">صور التوالف / التصفيات</label>
                 <div class="row">
                   <div
                     class="col-lg-6 py-0 mb-4"
@@ -231,8 +219,9 @@
                     <div class="row w-100">
                       <div class="col-11">
                         <uplode-image
+                          :data_src="row.image"
                           @inputChanged="uplodeImg($event, index)"
-                          placeHolder="صور المزاد"
+                          placeHolder="صور التوالف / التصفيات"
                         ></uplode-image>
                       </div>
 
@@ -248,9 +237,8 @@
                         </span>
 
                         <span
-                          v-if="data.tender_images.length > 1"
                           class="append mx-1"
-                          @click="deleteTenderImagesRow(index)"
+                          @click="deleteTenderImagesRow(index, row.id)"
                         >
                           <i class="fas fa-minus-circle"></i>
                         </span>
@@ -278,9 +266,7 @@
                           :for="`file_input_${index}`"
                           class="form-label"
                           v-if="!row.name"
-                        >
-                          اختار ملف
-                        </label>
+                        ></label>
                         <label
                           :for="`file_input_${index}`"
                           class="form-label"
@@ -332,7 +318,7 @@
         </div>
 
         <div class="buttons_wrapper">
-          <button class="button_style_1" :disabled="btnIsLoading">
+          <button class="button_style_1">
             {{ $t('forms.submit') }}
             <span class="btn_loader" v-if="btnIsLoading"></span>
           </button>
@@ -359,13 +345,17 @@
 </template>
 
 <script>
-import { json } from 'body-parser'
-
+import VueDocPreview from 'vue-doc-preview'
 export default {
-  name: 'Create',
+  name: 'Update',
+  components: { VueDocPreview },
+  props: ['id'],
 
   data() {
     return {
+      // ========== Main Loader
+      loaderPage: false,
+
       // ========== Breadcrumbs
       items: [
         {
@@ -374,12 +364,12 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.tenders.title'),
+          text: this.$t('breadcrumb.expirations.title'),
           disabled: false,
-          href: '/tenders/show-all',
+          href: '/expirations/show-all',
         },
         {
-          text: this.$t('breadcrumb.tenders.add'),
+          text: this.$t('breadcrumb.expirations.edit'),
           disabled: true,
           href: '',
         },
@@ -394,15 +384,11 @@ export default {
         category_ids: null,
         title: null,
         desc: null,
+        product_name: null,
         expiry_date: null,
         company_name: null,
-        tender_specifications_value: null,
-        insurance_value: null,
-        selectedFile: {
-          name: null,
-          path: null,
-          file: null,
-        },
+        type: null,
+        agent_type: null,
         tender_images: [
           {
             image: null,
@@ -423,19 +409,23 @@ export default {
         show_model: false,
         model_img_src: '',
       },
+      agent_types: [
+        {
+          id: 'agent',
+          name: 'وكيل',
+        },
+        { id: 'distrebutor', name: 'موزع' },
+      ],
+      types: [
+        {
+          id: 'potential_agent_or_potential_distrebutor',
+          name: 'وكيل محتمل / موزع محتمل',
+        },
+        { id: 'required_agent_or_distrebutor', name: 'مطلوب( وكيل / موزع)' },
+      ],
       clients: [],
       categories: [],
     }
-  },
-
-  mounted() {
-    this.getDataLocalStorage()
-    this.$globalServices
-      .getData('clients/without-pagination')
-      .then((data) => (this.clients = data))
-    this.$globalServices
-      .getData('categories_without_pagination')
-      .then((data) => (this.categories = data))
   },
 
   methods: {
@@ -444,20 +434,46 @@ export default {
       current.setDate(current.getDate() + 1)
       return current >= new Date()
     },
-    addDataLocalStorage() {
-      localStorage.setItem('tender_data', JSON.stringify(this.data))
+    // Get_Data
+    getData() {
+      this.loaderPage = true
+      this.$axios({
+        method: 'GET',
+        url: `expirations/${this.id}`,
+      }).then((res) => {
+        this.loaderPage = false
+        this.data.user_id = res.data.data.user
+        this.data.category_ids = res.data.data.categories
+        this.data.title = res.data.data.title
+        this.data.desc = res.data.data.desc
+        this.data.expiry_date = res.data.data.expiry_date
+        this.data.company_name = res.data.data.company_name
+        this.data.product_name = res.data.data.product_name
+        this.data.type = this.types.find((el) => el.id == res.data.data.type)
+        this.data.agent_type = this.agent_types.find(
+          (el) => el.id == res.data.data.agent_type,
+        )
+
+        if (res.data.data.agent_images.length) {
+          this.data.tender_images = res.data.data.agent_images.map((el) => ({
+            id: el.id,
+            image: el.media,
+          }))
+        }
+
+        if (res.data.data.agent_files.length) {
+          this.data.tender_other_files = res.data.data.agent_files.map(
+            (el) => ({
+              id: el.id,
+              file: null,
+              name: el.media,
+              path: el.media,
+            }),
+          )
+        }
+      })
     },
 
-    getDataLocalStorage() {
-      if (localStorage.getItem('tender_data')) {
-        this.data = JSON.parse(localStorage.getItem('tender_data'))
-      }
-    },
-    show_model_1(e) {
-      this.model_1.model_img_src = e.path
-      this.model_1.show_model = true
-    },
-    // Validate Data
     validateForm() {
       this.btnIsLoading = true
 
@@ -493,10 +509,18 @@ export default {
         })
         this.btnIsLoading = false
         return
-      } else if (!this.data.selectedFile.file) {
+      } else if (!this.data.type) {
         this.$iziToast.error({
           timeout: 2000,
-          message: 'ملف مواصفات المزاد مطلوب',
+          message: this.$t('forms.validation.type'),
+          position: 'bottomRight',
+        })
+        this.btnIsLoading = false
+        return
+      } else if (!this.data.agent_type) {
+        this.$iziToast.error({
+          timeout: 2000,
+          message: 'حقل نوع الوكالة مطلوب',
           position: 'bottomRight',
         })
         this.btnIsLoading = false
@@ -522,11 +546,12 @@ export default {
       }
       this.submitData()
     },
-    handelSelectedFile(e) {
-      this.data.selectedFile.file = e.target.files[0]
-      this.data.selectedFile.name = e.target.files[0].name
-      this.data.selectedFile.path = URL.createObjectURL(e.target.files[0])
+    // img Model
+    show_model_1(e) {
+      this.model_1.model_img_src = e.path
+      this.model_1.show_model = true
     },
+
     handelOtherFile(e, index) {
       this.data.tender_other_files[index].file = e.target.files[0]
       this.data.tender_other_files[index].name = e.target.files[0].name
@@ -539,8 +564,32 @@ export default {
         image: null,
       })
     },
-    deleteTenderImagesRow(index) {
-      this.data.tender_images.splice(index, 1)
+    deleteTenderImagesRow(index, id) {
+      if (id) {
+        this.$axios.delete(`expiration/${this.id}/medias/${id}`).then(() => {
+          this.$iziToast.success({
+            timeout: 2000,
+            message: this.$t('deleteSuccess'),
+            position: 'bottomRight',
+          })
+
+          if (this.data.tender_images.length == 1) {
+            this.data.tender_images.splice(index, 1)
+            setTimeout(() => this.appendTenderImagesRow(), 300)
+          } else {
+            this.data.tender_images.splice(index, 1)
+          }
+        })
+      } else {
+        if (this.data.tender_images.length == 1) {
+          this.data.tender_images.splice(index, 1)
+          setTimeout(() => this.appendTenderImagesRow(), 300)
+        } else {
+          this.data.tender_images.splice(index, 1)
+        }
+      }
+      // v -if= "data.tender_images.length > 1"
+      // if()
     },
     appendOtherFileRow() {
       this.data.tender_other_files.push({
@@ -555,43 +604,38 @@ export default {
     uplodeImg(obj, index) {
       this.data.tender_images[index].image = obj
     },
+
     // Submit Data
     submitData() {
       const submit_data = new FormData()
+      submit_data.append('_method', 'PUT')
       submit_data.append('user_id', this.data.user_id.id)
       this.data.category_ids.map((el, index) =>
         submit_data.append(`category_ids[${index}]`, el.id),
       )
-
       submit_data.append('title', this.data.title)
       submit_data.append('desc', this.data.desc)
+      submit_data.append('agent_type', this.data.agent_type.id)
+      submit_data.append('type', this.data.type.id)
       submit_data.append('expiry_date', this.data.expiry_date)
       submit_data.append('company_name', this.data.company_name)
-      submit_data.append(
-        'tender_specifications_value',
-        this.data.tender_specifications_value,
-      )
-      submit_data.append('insurance_value', this.data.insurance_value)
-      if (this.data.selectedFile.file) {
-        submit_data.append(
-          'tender_specifications_file',
-          this.data.selectedFile.file,
-        )
-      }
+      submit_data.append('product_name', this.data.product_name)
+
       this.data.tender_images.map((el, index) => {
-        if (el.image) {
-          submit_data.append(`tender_images[${index}]`, el.image?.img_file)
+        if (el.image.img_file) {
+          submit_data.append(`agent_images[${index}]`, el.image.img_file)
         }
       })
+
       this.data.tender_other_files.map((el, index) => {
         if (el.file) {
-          submit_data.append(`tender_other_files[${index}]`, el.file)
+          submit_data.append(`agent_files[${index}]`, el.file)
         }
       })
 
       this.$axios({
         method: 'POST',
-        url: 'tenders',
+        url: `expirations/${this.id}`,
         data: submit_data,
       })
         .then(() => {
@@ -604,7 +648,7 @@ export default {
             message: this.$t('addSuccess'),
             position: 'bottomRight',
           })
-          this.$router.push({ path: '/tenders/show-all' })
+          this.$router.push({ path: '/expirations/show-all' })
           this.btnIsLoading = false
         })
         .catch((err) => {
@@ -616,6 +660,10 @@ export default {
           this.btnIsLoading = false
         })
     },
+  },
+
+  created() {
+    this.getData()
   },
 }
 </script>

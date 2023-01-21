@@ -3,29 +3,30 @@
     <!-- Start Breadcrumb -->
     <Breadcrumb
       :items="items"
-      search_route="/notifications/add"
-      search_title="إضافه اشعار"
+      search_route="/expirations/add"
+      search_title="إضافه تالف جديد"
       icon="fa-plus"
     />
     <!-- End Breadcrumb -->
 
-    <transition-group name="fadeInUp" mode="in-out">
-      <!-- Start Main Loader -->
-      <MainLoader key="loader" v-if="loading" />
-      <!-- End Main Loader -->
+    <!-- Start Statistics Card-->
 
-      <div key="main" v-else>
-        <!-- Start Statistics Card-->
-        <!-- <div class="row mb-5">
-          <div class="wrraper">
-            <stats-card
-              :title="$t('notsNum')"
-              :number="statisticsItem.number"
-            ></stats-card>
-          </div>
-        </div> -->
-        <!-- End Statistics Card-->
-
+    <!-- Start Main Loader -->
+    <transition name="fadeInUp" mode="out-in" v-if="loaderPage">
+      <MainLoader />
+    </transition>
+    <!-- End Main Loader -->
+    <div class="fadeIn" v-else>
+      <!-- <div class="row mb-5">
+        <div class="wrraper">
+          <stats-card
+            :title="$t('countriesNum')"
+            :number="statisticsItem.number"
+          ></stats-card>
+        </div>
+      </div> -->
+      <!-- End Statistics Card-->
+      <template>
         <!-- Start Main Section -->
         <main>
           <v-data-table
@@ -45,51 +46,36 @@
             <template v-slot:no-data>
               {{ $t('table.noData') }}
             </template>
-            <!-- Image -->
-            <template v-slot:[`item.images`]="{ item }">
-              <img class="image" :src="item.sender_data.avatar" />
+
+            <!-- avatar -->
+            <template v-slot:[`item.expiration_images`]="{ item }">
+              <img
+                v-if="item.expiration_images.length"
+                @click="show_model_1"
+                class="image"
+                :src="item.expiration_images[0].media"
+              />
+              <span v-else>لا يوجد</span>
             </template>
-            <!-- End:: Users Routes -->
-            <!-- <template v-slot:[`item.status`]="{ item }">
-              <span v-if="item.status == 'pending'" class="status pending">
-                في الانتظار
-              </span>
+            <template v-slot:[`item.is_expired`]="{ item }">
               <span
-                v-if="item.status == 'تم انهاء الطلب'"
-                class="status success"
+                class="status"
+                :class="item.is_expired ? 'success' : 'canceled'"
               >
-                {{ item.status_trans }}
-              </span>
-            </template> -->
-
-            <!-- Start:: Report Reason Modal Button -->
-            <template v-slot:[`item.body`]="{ item }">
-              <v-icon
-                class="show"
-                small
-                @click="controlReportReasonModalModal(item.body)"
-                v-if="item.body"
-              >
-                fal fa-eye
-              </v-icon>
-
-              <span v-else>_</span>
-            </template>
-            <!-- End:: Report Reason Modal Button -->
-            <template v-slot:[`item.is_readed`]="{ item }">
-              <span class="status" :class="item.is_readed ? 'paid' : 'unpaid'">
-                {{ item.is_readed ? 'نعم' : 'لا' }}
+                {{ item.is_expired ? $t('yes') : $t('no') }}
               </span>
             </template>
+
             <!-- Select actions-->
             <template v-slot:[`item.actions`]="{ item }">
               <div class="_actions">
                 <v-icon class="show" small @click="showItem(item)">
                   fal fa-eye
                 </v-icon>
-                <!-- <v-icon class="edit" small @click="editItem(item)">
+
+                <v-icon class="edit" small @click="editItem(item)">
                   fal fa-edit
-                </v-icon> -->
+                </v-icon>
                 <v-icon class="delete" small @click="deleteItem(item)">
                   fal fa-trash
                 </v-icon>
@@ -98,9 +84,7 @@
 
             <!-- ======================== Start Top Section ======================== -->
             <template v-slot:top>
-              <h3 class="title table-title">
-                الاشعارات
-              </h3>
+              <h3 class="title table-title">الدول</h3>
               <!-- Delete dialog -->
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
@@ -120,14 +104,10 @@
                 </v-card>
               </v-dialog>
 
-              <!-- Start:: Text Content Modal -->
-              <TextContentModal
-                @toggleModal="controlReportReasonModalModal"
-                :modalIsActive="reportReasonModalIsOpen"
-                title="الوصف"
-                :textContent="reportReasonToShow"
-              />
-              <!-- End:: Text Content Modal -->
+              <!-- Add & Delete -->
+              <v-row>
+                <v-col cols="12" sm="8"></v-col>
+              </v-row>
             </template>
             <!-- ======================== End Top Section ======================== -->
           </v-data-table>
@@ -139,15 +119,6 @@
           <div
             class="pagination_container text-center mb-5 d-flex justify-content-end"
           >
-            <!-- <div class="select-pagination d-flex">
-              <span class="first">{{ $t('show') }}</span>
-              <v-select
-                :items="[5, 20, 50, 100]"
-                v-model="paginations.items_per_page"
-              ></v-select>
-              <span>{{ $t('entries') }}</span>
-            </div> -->
-
             <v-pagination
               v-model.number="paginations.current_page"
               :length="paginations.last_page"
@@ -157,27 +128,34 @@
           </div>
         </template>
         <!-- End Pagination -->
-      </div>
-    </transition-group>
+
+        <!-- Start Image_Model -->
+        <base-model
+          @closeModel="model_1.show_model = false"
+          :show="model_1.show_model"
+        >
+          <div class="image">
+            <img
+              v-if="model_1.model_img_src"
+              :src="model_1.model_img_src"
+              alt="..."
+            />
+          </div>
+        </base-model>
+        <!-- End Image_Model -->
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
-// Start:: Importing Modals
-import TextContentModal from '@/components/Modals/TextContentModal.vue'
-// End:: Importing Modals
-
 export default {
-  name: 'UsersReports',
-
-  components: {
-    TextContentModal,
-  },
-
   data() {
     return {
+      // ========== Main Loader
+      loaderPage: false,
       // ========== Breadcrumbs
       items: [
         {
@@ -186,15 +164,15 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.notifications.title'),
+          text: this.$t('breadcrumb.expirations.title'),
+          disabled: false,
+          href: '/expirations/show-all',
+        },
+        {
+          text: this.$t('breadcrumb.expirations.all'),
           disabled: true,
           href: '',
         },
-        // {
-        //   text: this.$t("breadcrumb.transaction.products"),
-        //   disabled: true,
-        //   href: "",
-        // },
       ],
 
       // ========== Statistics
@@ -206,8 +184,15 @@ export default {
       // ========== dialog Status
       dialogDelete: false,
       itemtoDelete: null,
-      reportReasonModalIsOpen: false,
-      reportReasonToShow: null,
+
+      // ========== Model
+      model_1: {
+        show_model: false,
+        model_img_src: '',
+      },
+
+      // ========== Body Section
+      calories: '',
 
       // ========== Your Data
       rows: [], // injected in created
@@ -219,7 +204,7 @@ export default {
         items_per_page: 20,
       },
 
-      // ========== Loading
+      // ========== Loding
       loading: false,
     }
   },
@@ -233,19 +218,19 @@ export default {
       if (this.lang == 'ar') {
         return [
           {
-            text: 'صورة المرسل',
+            text: '#',
             align: 'center',
-            value: 'images',
+            value: 'id',
+            sortable: true,
+          },
+          {
+            text: 'صوره',
+            align: 'center',
+            value: 'expiration_images',
             sortable: false,
           },
           {
-            text: 'اسم المرسل',
-            align: 'center',
-            value: 'sender_data.fullname',
-            sortable: false,
-          },
-          {
-            text: 'العنوان',
+            text: 'الاسم',
             align: 'center',
             value: 'title',
             sortable: false,
@@ -253,22 +238,35 @@ export default {
           {
             text: 'الوصف',
             align: 'center',
-            value: 'body',
+            value: 'desc',
             sortable: false,
           },
           {
-            text: 'مقروء؟',
+            text: 'اسم المنتج',
             align: 'center',
-            value: 'is_readed',
+            value: 'product_name',
+            sortable: false,
+          },
+          {
+            text: 'تاريخ الانتهاء',
+            align: 'center',
+            value: 'expiry_date',
+            sortable: false,
+          },
+          {
+            text: 'منتهي؟',
+            align: 'center',
+            value: 'is_expired',
             sortable: false,
           },
 
           {
-            text: 'التاريخ',
+            text: 'الحالة',
             align: 'center',
-            value: 'created_at',
+            value: 'status',
             sortable: false,
           },
+
           {
             text: 'التحكم',
             value: 'actions',
@@ -285,21 +283,45 @@ export default {
             sortable: true,
           },
           {
-            text: 'Reporter',
+            text: 'Flag',
             align: 'center',
-            value: 'from',
+            value: 'image',
             sortable: false,
           },
           {
-            text: 'Reported',
+            text: 'Name',
             align: 'center',
-            value: 'to',
+            value: 'ar.name',
             sortable: false,
           },
           {
-            text: 'Report Reason',
+            text: 'Name (En)',
             align: 'center',
-            value: 'report_reason',
+            value: 'en.name',
+            sortable: false,
+          },
+          {
+            text: 'Short Name',
+            align: 'center',
+            value: 'short_name',
+            sortable: false,
+          },
+          {
+            text: 'Phone Code',
+            align: 'center',
+            value: 'phonecode',
+            sortable: false,
+          },
+          {
+            text: 'Currency (Ar)',
+            align: 'center',
+            value: 'ar.currency',
+            sortable: false,
+          },
+          {
+            text: 'Currency (En)',
+            align: 'center',
+            value: 'en.currency',
             sortable: false,
           },
           {
@@ -322,23 +344,21 @@ export default {
       }
     },
 
-    show_model_1() {},
-
-    // ===== Toggle Report Reason Modal =====
-    controlReportReasonModalModal(selectedReportReason) {
-      this.reportReasonToShow = selectedReportReason
-      this.reportReasonModalIsOpen = !this.reportReasonModalIsOpen
+    // img Model
+    show_model_1(e) {
+      this.model_1.model_img_src = e.target.src
+      this.model_1.show_model = true
     },
 
     // ==================== Start CRUD ====================
     addItem() {
-      this.$router.push({ path: '/notifications/add' })
+      this.$router.push({ path: '/expirations/add' })
     },
     showItem(item) {
-      this.$router.push({ path: '/notifications/show/' + item.id })
+      this.$router.push({ path: '/expirations/show/' + item.id })
     },
     editItem(item) {
-      this.$router.push({ path: '/notifications/edit/' + item.id })
+      this.$router.push({ path: '/expirations/edit/' + item.id })
     },
     // ===== Delete
     deleteItem(item) {
@@ -348,7 +368,7 @@ export default {
     deleteItemConfirm() {
       this.$axios({
         method: 'DELETE',
-        url: `notifications/${this.itemtoDelete.id}`,
+        url: `expirations/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
@@ -375,24 +395,26 @@ export default {
     // Set Rows
     setRows() {
       this.loading = true
+      this.loaderPage = true
       this.$axios({
         method: 'GET',
-        url: 'notifications',
-        params: {
-          page: this.paginations.current_page,
-        },
+        url: 'expirations',
+        params: { page: this.paginations.current_page },
       })
         .then((res) => {
-          this.loading = false
           this.paginations.last_page = res.data.meta.last_page
           this.paginations.items_per_page = res.data.meta.per_page
 
           this.rows = res.data.data
-
+          // console.log(res.data.data)
           this.statisticsItem.number = res.data.meta.total
-        })
-        .catch(() => {
+
+          this.loaderPage = false
           this.loading = false
+        })
+        .catch((err) => {
+          this.loading = false
+          this.loaderPage = false
         })
     },
     fetchData(e) {

@@ -8,6 +8,33 @@ export default {
         },
         { id: 'female', name: this.$t('female') },
       ],
+
+      continents: [
+        {
+          id: 'africa',
+          name: this.$t('africa'),
+        },
+        {
+          id: 'asia',
+          name: this.$t('asia'),
+        },
+        {
+          id: 'europe',
+          name: this.$t('europe'),
+        },
+        {
+          id: 'south_america',
+          name: this.$t('south_america'),
+        },
+        {
+          id: 'north_america',
+          name: this.$t('north_america'),
+        },
+        {
+          id: 'australia',
+          name: this.$t('australia'),
+        },
+      ],
     }
   },
   methods: {

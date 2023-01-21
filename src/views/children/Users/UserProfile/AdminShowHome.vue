@@ -33,11 +33,12 @@
         </div>
 
         <div class="name_wrapper">
-          <h3>
-            <router-link :to="'/users/show/' + data.userInfo.id">
-              {{ data.userInfo.full_name }}
+          <h3 class="mb-0">
+            <router-link :to="`/users/show/${data.userInfo.id}`">
+              {{ data.userInfo.name }}
             </router-link>
           </h3>
+          <p class="mb-0">{{ data.userInfo.email }}</p>
         </div>
       </div>
       <div
@@ -51,9 +52,7 @@
       <MainLoader />
     </transition>
 
-    <personal-data v-else :userInfo="data.userInfo" />
-    <!-- <router-view :userInfo="data.userInfo">
-    </router-view> -->
+    <router-view :userInfo="data.userInfo"></router-view>
   </div>
 </template>
 

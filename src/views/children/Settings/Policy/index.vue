@@ -13,12 +13,7 @@
           <!-- START:: INPUT WRAPPER -->
           <div class="col-lg-6 py-0">
             <div class="input_wrapper top_label">
-              <textarea
-                class="form-control"
-                id="name_input8"
-                @input="checkIfInputIsEmpty"
-                v-model.trim="updateData.policy_ar"
-              ></textarea>
+              <ckeditor class="w-100" v-model="updateData.privacy_ar" />
               <label class="form-label">سياسة الخصوصية باللغة العربية</label>
             </div>
           </div>
@@ -27,12 +22,7 @@
           <!-- START:: INPUT WRAPPER -->
           <div class="col-lg-6 py-0">
             <div class="input_wrapper top_label">
-              <textarea
-                class="form-control"
-                id="name_input8"
-                @input="checkIfInputIsEmpty"
-                v-model.trim="updateData.policy_en"
-              ></textarea>
+              <ckeditor class="w-100" v-model="updateData.privacy_en" />
               <label class="form-label">
                 سياسة الخصوصية باللغة الانجليزية
               </label>
@@ -66,23 +56,9 @@ export default {
 
       // START:: CREATE DATA
       updateData: {
-        policy_ar: null,
-        policy_en: null,
+        privacy_ar: null,
+        privacy_en: null,
       },
-      // END:: CREATE DATA
-      encryValue: [
-        { name: 'ssl', value: 'ssl' },
-        { name: 'tls', value: 'tls' },
-      ],
-      smsStatus: [
-        { name: 'مفعل', value: 'enable' },
-        { name: 'غير مفعل', value: 'disable' },
-      ],
-      smsProviders: [
-        { name: 'HISMS', value: 'hisms' },
-        { name: 'Net powers', value: 'net_powers' },
-        { name: 'SMS Gateway', value: 'sms_gateway' },
-      ],
     }
   },
   methods: {
@@ -99,16 +75,13 @@ export default {
     getData() {
       this.$axios({
         method: 'GET',
-        url: 'setting',
+        url: 'settings',
       }).then((res) => {
         const result = res.data.data
-        for (let [key, value] of Object.entries(this.updateData)) {
-          console.log(value)
-          result.map((el) => {
-            if (key == el.key) {
-              this.updateData[key] = el.value
-            }
-          })
+        for (let [key, value] of Object.entries(result)) {
+          if (this.updateData.hasOwnProperty(key)) {
+            this.updateData[key] = value
+          }
         }
       })
     },
@@ -129,7 +102,7 @@ export default {
       }
       this.$axios({
         method: 'post',
-        url: 'setting',
+        url: 'settings',
         data: data,
       })
         .then(() => {

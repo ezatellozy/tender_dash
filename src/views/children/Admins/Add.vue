@@ -16,7 +16,7 @@
             <div class="col-lg-12 py-0">
               <uplode-image
                 @inputChanged="uplodeImg_1"
-                placeHolder="صورة المدير"
+                placeHolder="صورة المستخدم"
               ></uplode-image>
               <!-- End:: Image -->
             </div>
@@ -83,7 +83,6 @@
                   {{ $t('forms.labels.city') }}
                 </label>
                 <multiselect
-                  :disabled="!cities.length"
                   v-model="data.city_id"
                   :options="cities"
                   label="name"
@@ -123,6 +122,7 @@
               <div class="input_wrapper top_label">
                 <input
                   type="number"
+                  min="9"
                   class="form-control"
                   @input="helper_checkIfInputIsEmpty"
                   v-model.trim="data.phone"
@@ -194,6 +194,15 @@
               ></v-checkbox>
             </div>
             <!-- End:: Is Active -->
+            <!-- Start:: Is is_admin_active_user -->
+            <div class="col-lg-4 py-0">
+              <v-checkbox
+                :label="$t('forms.labels.is_admin_active_user')"
+                v-model="data.is_admin_active_user"
+                color="success"
+              ></v-checkbox>
+            </div>
+            <!-- End:: Is is_admin_active_user -->
             <!-- Start:: Is Active -->
             <div class="col-lg-4 py-0">
               <v-checkbox
@@ -274,11 +283,11 @@ export default {
         gender: null,
         city_id: null,
         is_active: true,
+        is_admin_active_user: true,
         is_ban: false,
         ban_reason: null,
       },
 
-      // ========== Select Lists Data
       countries: [],
       cities: [],
       phone_codes: [],
@@ -309,10 +318,10 @@ export default {
     getCities(e) {
       this.$axios({
         method: 'GET',
-        url: `cities_without_pagination`,
-        // url: `countries/${e.id}`,
+        // url: `cities`,
+        url: `countries/${e.id}`,
       }).then((res) => {
-        this.cities = res.data.data.map((item) => {
+        this.cities = res.data.data.cities.map((item) => {
           return {
             id: item.id,
             name: item.name,
@@ -444,15 +453,18 @@ export default {
         return
       }
     },
+
     // Submit Data
     submitData() {
       this.$globalStore
-        .submitData({ data: this.data }, 'client')
+        .submitData({ data: this.data }, 'admins')
         .then((res) => {
           this.btnIsLoading = false
-          if (res.data.status == 'fail') {
+          console.log(res)
+          if (res.data?.status == false) {
             return
           }
+
           this.$router.push('/admins/show-all')
         })
         .catch(() => (this.btnIsLoading = false))
@@ -462,6 +474,7 @@ export default {
   created() {
     // Start:: Fire Methods
     this.getCountries()
+
     // End:: Fire Methods
   },
 }

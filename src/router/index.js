@@ -50,9 +50,9 @@ import EditCity from '../views/children/Cities/Edit.vue'
 // ========== End Cities ==========
 
 // ========== Start profile ==========
-import ProfileHome from '../views/children/Profile/Home.vue'
-import ProfileShow from '../views/children/Profile/AdminShowHome.vue'
-import ProfileEdit from '../views/children/Profile/Edit.vue'
+// import ProfileHome from '../views/children/Profile/Home.vue'
+// import ProfileShow from '../views/children/Profile/AdminShowHome.vue'
+// import ProfileEdit from '../views/children/Profile/Edit.vue'
 // ********** Auth
 import Login from '../views/Auth/Login.vue'
 
@@ -160,8 +160,25 @@ window.rootRouter = router = new VueRouter({
             // Show Admin
             {
               path: 'show/:id',
-              component: UserShowHome,
+              component: () =>
+                import('../views/children/Users/UserProfile/AdminShowHome.vue'),
               props: true,
+              children: [
+                {
+                  path: '',
+                  component: () =>
+                    import(
+                      '@/views/children/Users/UserProfile/children/Cards.vue'
+                    ),
+                },
+                {
+                  path: 'data',
+                  component: () =>
+                    import(
+                      '../views/children/Users/UserProfile/children/PersonalData.vue'
+                    ),
+                },
+              ],
             },
           ],
         },
@@ -204,15 +221,27 @@ window.rootRouter = router = new VueRouter({
         // ========== Start profile ==========
         {
           path: '/profile',
-          component: ProfileHome,
+          component: () =>
+            import('../views/children/Profile/AdminShowHome.vue'),
           children: [
             {
-              path: 'show',
-              component: ProfileShow,
+              path: '',
+              component: () =>
+                import(
+                  '../views/children/Profile/UserProfile/children/Cards.vue'
+                ),
             },
             {
+              path: 'data',
+              component: () =>
+                import(
+                  '../views/children/Profile/UserProfile/children/PersonalData.vue'
+                ),
+            },
+
+            {
               path: 'edit',
-              component: ProfileEdit,
+              component: () => import('../views/children/Profile/Edit.vue'),
             },
           ],
         },
@@ -244,6 +273,61 @@ window.rootRouter = router = new VueRouter({
           ],
         },
         // ========== End Tenders ==========
+        // ========== Start Expiration ==========
+        {
+          path: '/expirations',
+          component: () => import('@/views/children/Expiration/Home.vue'),
+          children: [
+            // Show All
+            {
+              path: 'show-all',
+              name: 'AllExpiration',
+              component: () =>
+                import('@/views/children/Expiration/ShowAll.vue'),
+            },
+            // Add
+            {
+              path: 'add',
+              name: 'AddExpiration',
+              component: () => import('@/views/children/Expiration/Add.vue'),
+            },
+            // Edit
+            {
+              path: 'edit/:id',
+              name: 'EditExpiration',
+              component: () => import('@/views/children/Expiration/Edit.vue'),
+              props: true,
+            },
+          ],
+        },
+        // ========== End Expiration ==========
+        // ========== Start Agents ==========
+        {
+          path: '/agents',
+          component: () => import('@/views/children/Agents/Home.vue'),
+          children: [
+            // Show All
+            {
+              path: 'show-all',
+              name: 'AllAgents',
+              component: () => import('@/views/children/Agents/ShowAll.vue'),
+            },
+            // Add
+            {
+              path: 'add',
+              name: 'AddAgent',
+              component: () => import('@/views/children/Agents/Add.vue'),
+            },
+            // Edit
+            {
+              path: 'edit/:id',
+              name: 'EditAgent',
+              component: () => import('@/views/children/Agents/Edit.vue'),
+              props: true,
+            },
+          ],
+        },
+        // ========== End Agents ==========
         // ========== Start Countries ==========
         {
           path: '/countries',
@@ -356,6 +440,11 @@ window.rootRouter = router = new VueRouter({
               path: 'terms',
               component: () =>
                 import('../views/children/Settings/Terms/index.vue'),
+            },
+            {
+              path: 'whyus',
+              component: () =>
+                import('../views/children/Settings/WhyUs/index.vue'),
             },
           ],
         },

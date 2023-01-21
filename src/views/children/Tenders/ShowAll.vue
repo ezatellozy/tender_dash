@@ -48,16 +48,30 @@
             </template>
 
             <!-- avatar -->
-            <template v-slot:[`item.image`]="{ item }">
-              <img @click="show_model_1" class="image" :src="item.image" />
+            <template v-slot:[`item.tender_images`]="{ item }">
+              <img
+                v-if="item.tender_images.length"
+                @click="show_model_1"
+                class="image"
+                :src="item.tender_images[0].media"
+              />
+              <span v-else>لا يوجد</span>
+            </template>
+            <template v-slot:[`item.is_expired`]="{ item }">
+              <span
+                class="status"
+                :class="item.is_expired ? 'success' : 'canceled'"
+              >
+                {{ item.is_expired ? $t('yes') : $t('no') }}
+              </span>
             </template>
 
             <!-- Select actions-->
             <template v-slot:[`item.actions`]="{ item }">
               <div class="_actions">
-                <!-- <v-icon class="show" small @click="showItem(item)">
-              fal fa-eye
-            </v-icon> -->
+                <v-icon class="show" small @click="showItem(item)">
+                  fal fa-eye
+                </v-icon>
 
                 <v-icon class="edit" small @click="editItem(item)">
                   fal fa-edit
@@ -210,40 +224,34 @@ export default {
             sortable: true,
           },
           {
-            text: 'علم الدولة',
+            text: 'صوره',
             align: 'center',
-            value: 'image',
+            value: 'tender_images',
             sortable: false,
           },
           {
-            text: 'اسم الدولة',
+            text: 'الاسم',
             align: 'center',
-            value: 'name',
+            value: 'title',
             sortable: false,
           },
           {
-            text: 'الجنسية',
+            text: 'الوصف',
             align: 'center',
-            value: 'nationality',
+            value: 'desc',
+            sortable: false,
+          },
+          {
+            text: 'منتهي؟',
+            align: 'center',
+            value: 'is_expired',
             sortable: false,
           },
 
           {
-            text: 'الإسم المختصر',
+            text: 'الحالة',
             align: 'center',
-            value: 'short_name',
-            sortable: false,
-          },
-          {
-            text: 'كود الهاتف',
-            align: 'center',
-            value: 'phone_code',
-            sortable: false,
-          },
-          {
-            text: 'العملة',
-            align: 'center',
-            value: 'currency',
+            value: 'status',
             sortable: false,
           },
 

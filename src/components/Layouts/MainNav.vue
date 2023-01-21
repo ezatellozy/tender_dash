@@ -46,7 +46,7 @@
             </transition>
           </div>
           <div class="text">
-            <span class="name">{{ userDataExist.fullname }}</span>
+            <span class="name">{{ userDataExist.name }}</span>
             <span class="available">{{ userDataExist.phone }}</span>
           </div>
         </div>

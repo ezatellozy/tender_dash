@@ -107,12 +107,12 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.about.title'),
-          disabled: false,
-          href: '/settings/about',
+          text: 'رسائل المستخدمين',
+          disabled: true,
+          href: '/contact_messages',
         },
         {
-          text: this.$t('breadcrumb.about.edit'),
+          text: 'الرد علي الرسالة',
           disabled: true,
           href: '',
         },

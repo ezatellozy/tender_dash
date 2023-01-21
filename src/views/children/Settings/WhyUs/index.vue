@@ -13,8 +13,8 @@
           <!-- START:: INPUT WRAPPER -->
           <div class="col-lg-6 py-0">
             <div class="input_wrapper top_label">
-              <ckeditor class="w-100" v-model="updateData.about_ar" />
-              <label class="form-label">من نحن باللغة العربية</label>
+              <ckeditor class="w-100" v-model="updateData.why_us_ar" />
+              <label class="form-label">لماذا نحن باللغة العربية</label>
             </div>
           </div>
           <!-- END:: INPUT WRAPPER -->
@@ -22,9 +22,9 @@
           <!-- START:: INPUT WRAPPER -->
           <div class="col-lg-6 py-0">
             <div class="input_wrapper top_label">
-              <ckeditor class="w-100" v-model="updateData.about_en" />
+              <ckeditor class="w-100" v-model="updateData.why_us_en" />
               <label class="form-label">
-                من نحن باللغة الانجليزية
+                لماذا نحن باللغة الانجليزية
               </label>
             </div>
           </div>
@@ -56,8 +56,8 @@ export default {
 
       // START:: CREATE DATA
       updateData: {
-        about_ar: null,
-        about_en: null,
+        why_us_ar: null,
+        why_us_en: null,
       },
     }
   },
