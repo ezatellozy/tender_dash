@@ -4,7 +4,7 @@
       <div class="inputs custom_card">
         <div class="card-header">
           <div class="log-img mb-5">
-            <img src="@/assets/images/icons/logo.svg" width="250" height="80" />
+            <img src="@/assets/images/icons/logo.png" width="250" height="80" />
           </div>
           <h4 class="mt-4">{{ $t('auth.title') }}</h4>
           <p>{{ $t('auth.desc') }}</p>

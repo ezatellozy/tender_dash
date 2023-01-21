@@ -23,7 +23,7 @@
             </div>
             <!-- End:: Is Active -->
 
-            <div class="col-lg-12 py-0" v-if="data.all">
+            <div class="col-lg-12 py-0" v-if="!data.all">
               <div class="input_wrapper top_label">
                 <label class="form-label">المستخدمين</label>
                 <multiselect
@@ -36,22 +36,6 @@
                   :allow-empty="true"
                   :show-labels="false"
                   multiple
-                ></multiselect>
-                <!-- multiple -->
-              </div>
-            </div>
-            <div class="col-lg-12 py-0" v-else>
-              <div class="input_wrapper top_label">
-                <label class="form-label">مستخدم</label>
-                <multiselect
-                  v-model="data.clients"
-                  :options="clients"
-                  label="name"
-                  track-by="id"
-                  placeholder=" "
-                  :searchable="true"
-                  :allow-empty="true"
-                  :show-labels="false"
                 ></multiselect>
                 <!-- multiple -->
               </div>
@@ -152,7 +136,7 @@ export default {
     validateCreateForm() {
       this.btnIsLoading = true
 
-      if (!this.data.all && this.data.clients.length == 0) {
+      if (!this.data.all && this.data.user_list.length == 0) {
         this.$iziToast.error({
           timeout: 2000,
           message: this.$t('forms.validation.clients'),
@@ -186,14 +170,11 @@ export default {
     submitData() {
       const submit_data = new FormData()
       if (!this.data.all) {
-        submit_data.append('user_id', 'all')
         if (this.data.user_list.length) {
           this.data.user_list.map((item, index) => {
             submit_data.append(`user_ids[${index}]`, item.id)
           })
         }
-      } else {
-        submit_data.append(`user_id`, this.data.clients.id)
       }
       submit_data.append('all', +this.data.all)
       submit_data.append('title', this.data.title)

@@ -26,7 +26,7 @@
                   <SparksAreaCharts
                     dir="ltr"
                     :SectionRoute="'/users/all'"
-                    :ChartColor="'#CD201F'"
+                    :ChartColor="'#648dc4'"
                     ChartTitle=""
                     ChartName="الزائرين اليوم"
                     :ChartLabels="[
@@ -41,7 +41,7 @@
                   >
                     <template #chart_title>
                       <span class="title_text">احصائيات</span>
-                      <p class="chart_val" :style="{ color: '#CD201F' }">
+                      <p class="chart_val" :style="{ color: '#648dc4' }">
                         20
                       </p>
                     </template>

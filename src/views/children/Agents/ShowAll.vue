@@ -48,12 +48,12 @@
             </template>
 
             <!-- avatar -->
-            <template v-slot:[`item.expiration_images`]="{ item }">
+            <template v-slot:[`item.agent_images`]="{ item }">
               <img
-                v-if="item.expiration_images.length"
+                v-if="item.agent_images.length"
                 @click="show_model_1"
                 class="image"
-                :src="item.expiration_images[0].media"
+                :src="item.agent_images[0].media"
               />
               <span v-else>لا يوجد</span>
             </template>
@@ -84,7 +84,7 @@
 
             <!-- ======================== Start Top Section ======================== -->
             <template v-slot:top>
-              <h3 class="title table-title">الدول</h3>
+              <h3 class="title table-title">الوكلاء</h3>
               <!-- Delete dialog -->
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
@@ -226,7 +226,7 @@ export default {
           {
             text: 'صوره',
             align: 'center',
-            value: 'expiration_images',
+            value: 'agent_images',
             sortable: false,
           },
           {

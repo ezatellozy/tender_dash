@@ -15,13 +15,13 @@
               class="img-fluid"
               width="120px"
               v-if="current_theme == 'light'"
-              src="@/assets/images/icons/logo.svg"
+              src="@/assets/images/icons/logo.png"
             />
             <img
               width="120px"
               class="img-fluid"
               v-else
-              src="@/assets/images/icons/logo.svg"
+              src="@/assets/images/icons/logo.png"
             />
           </router-link>
         </div>

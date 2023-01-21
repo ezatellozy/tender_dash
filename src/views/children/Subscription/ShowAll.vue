@@ -1,12 +1,7 @@
 <template>
   <div class="wrraper">
     <!-- Start Breadcrumb -->
-    <Breadcrumb
-      :items="items"
-      search_route="/tenders/add"
-      search_title="إضافه مناقصة جديدة"
-      icon="fa-plus"
-    />
+    <Breadcrumb :items="items" />
     <!-- End Breadcrumb -->
 
     <!-- Start Statistics Card-->
@@ -47,16 +42,6 @@
               {{ $t('table.noData') }}
             </template>
 
-            <!-- avatar -->
-            <template v-slot:[`item.tender_images`]="{ item }">
-              <img
-                v-if="item.tender_images.length"
-                @click="show_model_1"
-                class="image"
-                :src="item.tender_images[0].media"
-              />
-              <span v-else>لا يوجد</span>
-            </template>
             <template v-slot:[`item.is_expired`]="{ item }">
               <span
                 class="status"
@@ -84,7 +69,9 @@
 
             <!-- ======================== Start Top Section ======================== -->
             <template v-slot:top>
-              <h3 class="title table-title">المزادات</h3>
+              <h3 class="title table-title">
+                الباقات
+              </h3>
               <!-- Delete dialog -->
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
@@ -130,18 +117,42 @@
         <!-- End Pagination -->
 
         <!-- Start Image_Model -->
-        <base-model
-          @closeModel="model_1.show_model = false"
-          :show="model_1.show_model"
-        >
-          <div class="image">
-            <img
-              v-if="model_1.model_img_src"
-              :src="model_1.model_img_src"
-              alt="..."
-            />
-          </div>
-        </base-model>
+
+        <v-dialog v-model="model_1.show_model" persistent max-width="700px">
+          <v-card>
+            <v-container>
+              <div class="row justify-content-between">
+                <!-- Start:: title -->
+                <div
+                  class="col-lg-6 py-0"
+                  v-for="(item, key) of model_1.itemToShow"
+                  :key="item"
+                >
+                  <div class="input_wrapper top_label">
+                    <input
+                      disabled
+                      type="text"
+                      class="form-control"
+                      :value="item"
+                    />
+                    <label for="name_input" class="form-label">
+                      {{ $t(`forms.labels.${key}`) }}
+                    </label>
+                  </div>
+                </div>
+                <!-- End:: title-->
+              </div>
+            </v-container>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="model_1.show_model = false"
+            >
+              اغلاق
+            </v-btn>
+          </v-card>
+        </v-dialog>
         <!-- End Image_Model -->
       </template>
     </div>
@@ -164,19 +175,14 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.tenders.title'),
+          text: this.$t('breadcrumb.subscription.title'),
           disabled: false,
-          href: '/tenders/show-all',
-        },
-        {
-          text: this.$t('breadcrumb.tenders.all'),
-          disabled: true,
-          href: '',
+          href: '/subscriptionl',
         },
       ],
 
       // ========== Statistics
-      statisticsItem: {},
+      statisticsItem: 0,
 
       // ========== Top Section
       search: '',
@@ -188,7 +194,7 @@ export default {
       // ========== Model
       model_1: {
         show_model: false,
-        model_img_src: '',
+        itemToShow: null,
       },
 
       // ========== Body Section
@@ -224,13 +230,7 @@ export default {
             sortable: true,
           },
           {
-            text: 'صوره',
-            align: 'center',
-            value: 'tender_images',
-            sortable: false,
-          },
-          {
-            text: 'الاسم',
+            text: 'العنوان',
             align: 'center',
             value: 'title',
             sortable: false,
@@ -241,25 +241,18 @@ export default {
             value: 'desc',
             sortable: false,
           },
-          {
-            text: 'منتهي؟',
-            align: 'center',
-            value: 'is_expired',
-            sortable: false,
-          },
 
           {
             text: 'الحالة',
             align: 'center',
-            value: 'status',
+            value: 'duration_by_month',
             sortable: false,
           },
-
           {
-            text: 'التحكم',
-            value: 'actions',
-            sortable: false,
+            text: 'تغيير الحالة',
             align: 'center',
+            value: 'type',
+            sortable: false,
           },
         ]
       } else {
@@ -334,19 +327,26 @@ export default {
 
     // img Model
     show_model_1(e) {
-      this.model_1.model_img_src = e.target.src
+      this.model_1.itemToShow = e
       this.model_1.show_model = true
     },
 
     // ==================== Start CRUD ====================
     addItem() {
-      this.$router.push({ path: '/tenders/add' })
+      this.$router.push({ path: '/packages/add' })
     },
     showItem(item) {
-      this.$router.push({ path: '/tenders/show/' + item.id })
+      let obj = {}
+      for (const [key, value] of Object.entries(item)) {
+        if (key != 'id') {
+          obj[key] = value
+        }
+      }
+      this.model_1.itemToShow = obj
+      this.model_1.show_model = true
     },
     editItem(item) {
-      this.$router.push({ path: '/tenders/edit/' + item.id })
+      this.$router.push({ path: '/packages/edit/' + item.id })
     },
     // ===== Delete
     deleteItem(item) {
@@ -356,7 +356,7 @@ export default {
     deleteItemConfirm() {
       this.$axios({
         method: 'DELETE',
-        url: `tenders/${this.itemtoDelete.id}`,
+        url: `packages/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
@@ -386,17 +386,14 @@ export default {
       this.loaderPage = true
       this.$axios({
         method: 'GET',
-        url: 'tenders',
+        url: 'subscriptions',
         params: { page: this.paginations.current_page },
       })
         .then((res) => {
-          this.paginations.last_page = res.data.meta.last_page
-          this.paginations.items_per_page = res.data.meta.per_page
-
+          this.paginations.last_page = res.data.meta?.last_page
+          this.paginations.items_per_page = res.data.meta?.per_page
           this.rows = res.data.data
-          // console.log(res.data.data)
-          this.statisticsItem.number = res.data.meta.total
-
+          this.statisticsItem = res.data.meta?.total || 0
           this.loaderPage = false
           this.loading = false
         })

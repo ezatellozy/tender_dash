@@ -35,7 +35,7 @@
                   </h4>
                 </div>
                 <div class="logo-hidden">
-                  <img src="@/assets/images/icons/logo.svg" alt="" />
+                  <img src="@/assets/images/icons/logo.png" alt="" />
                 </div>
               </div>
             </div>

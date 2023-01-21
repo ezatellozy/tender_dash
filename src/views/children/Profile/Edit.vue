@@ -438,9 +438,10 @@ export default {
       if (this.data.image.img_file) {
         submit_data.append('avatar', this.data.image.img_file)
       }
-      submit_data.append('fullname', this.data.name)
+      submit_data.append('name', this.data.name)
       submit_data.append('gender', this.data.gender.id)
       submit_data.append('email', this.data.email)
+      submit_data.append('phone', this.data.phone)
       submit_data.append('phone_code', this.data.phone_code?.id)
       submit_data.append('country_id', this.data.country.id)
       submit_data.append('city_id', this.data.city.id)

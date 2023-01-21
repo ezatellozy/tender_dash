@@ -9,16 +9,6 @@ import HomePage from '../views/children/HomePage.vue'
 
 // ========== Start HomePage ==========
 
-// ========== Start Colors ==========
-import ColorsHome from '../views/children/Colors/Home.vue'
-// Show All
-import AllColors from '../views/children/Colors/ShowAll.vue'
-// Add
-import AddColor from '../views/children/Colors/Add.vue'
-// Edit
-import EditColor from '../views/children/Colors/Edit.vue'
-// ========== End Colors ==========
-
 // ========== Start Users ==========
 
 import UsersHome from '../views/children/Users/Home.vue'
@@ -107,34 +97,6 @@ window.rootRouter = router = new VueRouter({
           ],
         },
         // ========== End Categories ==========
-
-        // ========== Start Colors ==========
-        {
-          path: '/colors',
-          component: ColorsHome,
-          children: [
-            // Show All
-            {
-              path: 'show-all',
-              name: 'AllColors',
-              component: AllColors,
-            },
-            // Add
-            {
-              path: 'add',
-              name: 'AddColor',
-              component: AddColor,
-            },
-            // Edit
-            {
-              path: 'edit/:id',
-              name: 'EditColor',
-              component: EditColor,
-              props: true,
-            },
-          ],
-        },
-        // ========== End Colors ==========
 
         // ========== Start Users ==========
         {
@@ -383,6 +345,69 @@ window.rootRouter = router = new VueRouter({
           ],
         },
         // ========== End Cities ==========
+
+        // ========== Start Jobs ==========
+        {
+          path: '/jobs',
+          component: () => import('../views/children/Jobs/Home.vue'),
+          children: [
+            // Show All
+            {
+              path: 'show-all',
+              name: 'AllJobs',
+              component: () => import('../views/children/Jobs/ShowAll.vue'),
+            },
+            // Add
+            {
+              path: 'add',
+              name: 'AddJob',
+              component: () => import('../views/children/Jobs/Add.vue'),
+            },
+            // Edit
+            {
+              path: 'edit/:id',
+              name: 'EditJob',
+              component: () => import('../views/children/Jobs/Edit.vue'),
+              props: true,
+            },
+          ],
+        },
+        // ========== End Jobs ==========
+
+        // ========== Start Packages ==========
+        {
+          path: '/packages',
+          component: () => import('../views/children/Packages/Home.vue'),
+          children: [
+            // Show All
+            {
+              path: 'show-all',
+              name: 'AllPackages',
+              component: () => import('../views/children/Packages/ShowAll.vue'),
+            },
+            // Add
+            {
+              path: 'add',
+              name: 'AddPackage',
+              component: () => import('../views/children/Packages/Add.vue'),
+            },
+            // Edit
+            {
+              path: 'edit/:id',
+              name: 'EditPackage',
+              component: () => import('../views/children/Packages/Edit.vue'),
+              props: true,
+            },
+          ],
+        },
+        // ========== End Packages ==========
+        // ========== Start Subscription ==========
+        {
+          path: '/subscriptions',
+          component: () => import('../views/children/Subscription/ShowAll.vue'),
+          name: 'AllSubscription',
+        },
+        // ========== End Subscription ==========
 
         // ========== Start  Notifications ==========
         {

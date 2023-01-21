@@ -94,7 +94,6 @@
                 ></multiselect>
               </div>
             </div>
-
             <!-- end:: city -->
             <!-- Start:: phone_code -->
             <div class="col-lg-6 py-0">

@@ -3,8 +3,8 @@
     <!-- Start Breadcrumb -->
     <Breadcrumb
       :items="items"
-      search_route="/tenders/add"
-      search_title="إضافه مناقصة جديدة"
+      search_route="/jobs/add"
+      search_title="إضافه وظيفة جديدة"
       icon="fa-plus"
     />
     <!-- End Breadcrumb -->
@@ -48,12 +48,12 @@
             </template>
 
             <!-- avatar -->
-            <template v-slot:[`item.tender_images`]="{ item }">
+            <template v-slot:[`item.expiration_images`]="{ item }">
               <img
-                v-if="item.tender_images.length"
+                v-if="item.expiration_images.length"
                 @click="show_model_1"
                 class="image"
-                :src="item.tender_images[0].media"
+                :src="item.expiration_images[0].media"
               />
               <span v-else>لا يوجد</span>
             </template>
@@ -84,7 +84,7 @@
 
             <!-- ======================== Start Top Section ======================== -->
             <template v-slot:top>
-              <h3 class="title table-title">المزادات</h3>
+              <h3 class="title table-title">الوظائف</h3>
               <!-- Delete dialog -->
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
@@ -164,12 +164,12 @@ export default {
           href: '/',
         },
         {
-          text: this.$t('breadcrumb.tenders.title'),
+          text: this.$t('breadcrumb.jobs.title'),
           disabled: false,
-          href: '/tenders/show-all',
+          href: '/jobs/show-all',
         },
         {
-          text: this.$t('breadcrumb.tenders.all'),
+          text: this.$t('breadcrumb.jobs.all'),
           disabled: true,
           href: '',
         },
@@ -223,16 +223,17 @@ export default {
             value: 'id',
             sortable: true,
           },
+
           {
-            text: 'صوره',
+            text: 'المستخدم',
             align: 'center',
-            value: 'tender_images',
+            value: 'user.name',
             sortable: false,
           },
           {
-            text: 'الاسم',
+            text: 'مسمي الوظيفة',
             align: 'center',
-            value: 'title',
+            value: 'job_title',
             sortable: false,
           },
           {
@@ -242,9 +243,9 @@ export default {
             sortable: false,
           },
           {
-            text: 'منتهي؟',
+            text: 'اسم الشركة',
             align: 'center',
-            value: 'is_expired',
+            value: 'company_name',
             sortable: false,
           },
 
@@ -340,13 +341,13 @@ export default {
 
     // ==================== Start CRUD ====================
     addItem() {
-      this.$router.push({ path: '/tenders/add' })
+      this.$router.push({ path: '/jobs/add' })
     },
     showItem(item) {
-      this.$router.push({ path: '/tenders/show/' + item.id })
+      this.$router.push({ path: '/jobs/show/' + item.id })
     },
     editItem(item) {
-      this.$router.push({ path: '/tenders/edit/' + item.id })
+      this.$router.push({ path: '/jobs/edit/' + item.id })
     },
     // ===== Delete
     deleteItem(item) {
@@ -356,7 +357,7 @@ export default {
     deleteItemConfirm() {
       this.$axios({
         method: 'DELETE',
-        url: `tenders/${this.itemtoDelete.id}`,
+        url: `jobs/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
@@ -386,7 +387,7 @@ export default {
       this.loaderPage = true
       this.$axios({
         method: 'GET',
-        url: 'tenders',
+        url: 'jobs',
         params: { page: this.paginations.current_page },
       })
         .then((res) => {
