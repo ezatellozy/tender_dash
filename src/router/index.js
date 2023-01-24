@@ -187,7 +187,7 @@ window.rootRouter = router = new VueRouter({
             import('../views/children/Profile/AdminShowHome.vue'),
           children: [
             {
-              path: '',
+              path: 'show',
               component: () =>
                 import(
                   '../views/children/Profile/UserProfile/children/Cards.vue'
