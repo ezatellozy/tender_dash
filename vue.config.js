@@ -3,14 +3,17 @@ module.exports = {
 
   pluginOptions: {
     i18n: {
-      locale: undefined,
-      fallbackLocale: undefined,
-      localeDir: undefined,
-      enableInSFC: undefined,
+      locale: 'ar',
+      fallbackLocale: 'ar',
+      localeDir: 'locales',
+      enableInSFC: true,
+      includeLocales: false,
+      // enableBridge: true,
     },
   },
 
   transpileDependencies: ['vuetify'],
+  // transpileDependencies: true,
 
   css: {
     loaderOptions: {

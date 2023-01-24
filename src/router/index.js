@@ -222,13 +222,20 @@ window.rootRouter = router = new VueRouter({
             // Add
             {
               path: 'add',
-              name: 'AddTenders',
+              name: 'AddTender',
               component: () => import('@/views/children/Tenders/Add.vue'),
+            },
+            // Show
+            {
+              path: 'show/:id',
+              name: 'ShowTender',
+              component: () => import('@/views/children/Tenders/Show.vue'),
+              props: true,
             },
             // Edit
             {
               path: 'edit/:id',
-              name: 'EditTenders',
+              name: 'EditTender',
               component: () => import('@/views/children/Tenders/Edit.vue'),
               props: true,
             },
@@ -253,6 +260,14 @@ window.rootRouter = router = new VueRouter({
               name: 'AddExpiration',
               component: () => import('@/views/children/Expiration/Add.vue'),
             },
+            // Show
+            {
+              path: 'show/:id',
+              name: 'ShowExpiration',
+              component: () => import('@/views/children/Expiration/Show.vue'),
+              props: true,
+            },
+
             // Edit
             {
               path: 'edit/:id',
@@ -280,6 +295,14 @@ window.rootRouter = router = new VueRouter({
               name: 'AddAgent',
               component: () => import('@/views/children/Agents/Add.vue'),
             },
+            // Show
+            {
+              path: 'show/:id',
+              name: 'ShowAgent',
+              component: () => import('@/views/children/Agents/Show.vue'),
+              props: true,
+            },
+
             // Edit
             {
               path: 'edit/:id',
@@ -363,6 +386,13 @@ window.rootRouter = router = new VueRouter({
               name: 'AddJob',
               component: () => import('../views/children/Jobs/Add.vue'),
             },
+            // Show
+            {
+              path: 'show/:id',
+              name: 'ShowJob',
+              component: () => import('@/views/children/Jobs/Show.vue'),
+              props: true,
+            },
             // Edit
             {
               path: 'edit/:id',
@@ -390,6 +420,13 @@ window.rootRouter = router = new VueRouter({
               path: 'add',
               name: 'AddPackage',
               component: () => import('../views/children/Packages/Add.vue'),
+            },
+            // Show
+            {
+              path: 'show/:id',
+              name: 'ShowPackage',
+              component: () => import('@/views/children/Packages/Show.vue'),
+              props: true,
             },
             // Edit
             {

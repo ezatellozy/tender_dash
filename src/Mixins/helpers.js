@@ -1,38 +1,39 @@
+import i18n from '../i18n'
 export default {
   data() {
     return {
       genders: [
         {
           id: 'male',
-          name: this.$t('male'),
+          name: i18n.t('male'),
         },
-        { id: 'female', name: this.$t('female') },
+        { id: 'female', name: i18n.t('female') },
       ],
 
       continents: [
         {
           id: 'africa',
-          name: this.$t('africa'),
+          name: i18n.t('africa'),
         },
         {
           id: 'asia',
-          name: this.$t('asia'),
+          name: i18n.t('asia'),
         },
         {
           id: 'europe',
-          name: this.$t('europe'),
+          name: i18n.t('europe'),
         },
         {
           id: 'south_america',
-          name: this.$t('south_america'),
+          name: i18n.t('south_america'),
         },
         {
           id: 'north_america',
-          name: this.$t('north_america'),
+          name: i18n.t('north_america'),
         },
         {
           id: 'australia',
-          name: this.$t('australia'),
+          name: i18n.t('australia'),
         },
       ],
     }
