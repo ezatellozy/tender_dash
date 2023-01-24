@@ -79,7 +79,6 @@ export default {
         .then((res) => {
           this.data.userInfo = res.data.data
           this.data.userInfo.loading = false
-          console.log(this.data.userInfo)
           this.data.loading = false
         })
         .catch((err) => {
