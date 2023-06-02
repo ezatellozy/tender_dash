@@ -1,8 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /tender_dash
-    RewriteRule ^/tender_dash/index\.html$ - [L]
+    RewriteBase /dashboard
+    RewriteRule ^/dashboard/index\.html$ - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /tender_dash/index.html [L]
+    RewriteRule . /dashboard/index.html [L]
 </IfModule>

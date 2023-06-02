@@ -43,10 +43,10 @@
             <!-- ================== You Can use any slots you want ================== -->
             <!-- Select no data State -->
             <template v-slot:no-data>
-              {{ $t('table.noData') }}
+              {{ $t("table.noData") }}
             </template>
             <!-- Image -->
-            <template v-slot:[`item.images`]="{ item }">
+            <template v-slot:[`item.sender_data.avatar`]="{ item }">
               <img class="image" :src="item.sender_data.avatar" />
             </template>
             <!-- End:: Users Routes -->
@@ -78,7 +78,7 @@
             <!-- End:: Report Reason Modal Button -->
             <template v-slot:[`item.is_readed`]="{ item }">
               <span class="status" :class="item.is_readed ? 'paid' : 'unpaid'">
-                {{ item.is_readed ? 'نعم' : 'لا' }}
+                {{ item.is_readed ? "نعم" : "لا" }}
               </span>
             </template>
             <!-- Select actions-->
@@ -105,15 +105,15 @@
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
                   <v-card-title class="text-h5 justify-center">
-                    {{ $t('table.deletedialog.areYouSure') }}
+                    {{ $t("table.deletedialog.areYouSure") }}
                   </v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="#1B5E20" @click="deleteItemConfirm">
-                      {{ $t('table.deletedialog.ok') }}
+                      {{ $t("table.deletedialog.ok") }}
                     </v-btn>
                     <v-btn color="#F44336" @click="dialogDelete = false">
-                      {{ $t('table.deletedialog.cancel') }}
+                      {{ $t("table.deletedialog.cancel") }}
                     </v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
@@ -163,14 +163,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 // Start:: Importing Modals
-import TextContentModal from '@/components/Modals/TextContentModal.vue'
+import TextContentModal from "@/components/Modals/TextContentModal.vue";
 // End:: Importing Modals
 
 export default {
-  name: 'UsersReports',
+  name: "UsersReports",
 
   components: {
     TextContentModal,
@@ -181,14 +181,14 @@ export default {
       // ========== Breadcrumbs
       items: [
         {
-          text: this.$t('breadcrumb.mainPage'),
+          text: this.$t("breadcrumb.mainPage"),
           disabled: false,
-          href: '/',
+          href: "/",
         },
         {
-          text: this.$t('breadcrumb.notifications.title'),
+          text: this.$t("breadcrumb.notifications.title"),
           disabled: true,
-          href: '',
+          href: "",
         },
         // {
         //   text: this.$t("breadcrumb.transaction.products"),
@@ -201,7 +201,7 @@ export default {
       statisticsItem: {},
 
       // ========== Top Section
-      search: '',
+      search: "",
 
       // ========== dialog Status
       dialogDelete: false,
@@ -221,94 +221,94 @@ export default {
 
       // ========== Loading
       loading: false,
-    }
+    };
   },
 
   computed: {
     ...mapGetters({
-      lang: 'lang_module/lang',
+      lang: "lang_module/lang",
     }),
 
     headers() {
-      if (this.lang == 'ar') {
+      if (this.lang == "ar") {
         return [
           {
-            text: 'صورة المرسل',
-            align: 'center',
-            value: 'images',
+            text: "صورة المرسل",
+            align: "center",
+            value: "sender_data.avatar",
             sortable: false,
           },
           {
-            text: 'اسم المرسل',
-            align: 'center',
-            value: 'sender_data.fullname',
+            text: "اسم المرسل",
+            align: "center",
+            value: "sender_data.name",
             sortable: false,
           },
           {
-            text: 'العنوان',
-            align: 'center',
-            value: 'title',
+            text: "العنوان",
+            align: "center",
+            value: "title",
             sortable: false,
           },
           {
-            text: 'الوصف',
-            align: 'center',
-            value: 'body',
+            text: "الوصف",
+            align: "center",
+            value: "body",
             sortable: false,
           },
           {
-            text: 'مقروء؟',
-            align: 'center',
-            value: 'is_readed',
+            text: "مقروء؟",
+            align: "center",
+            value: "is_readed",
             sortable: false,
           },
 
           {
-            text: 'التاريخ',
-            align: 'center',
-            value: 'created_at',
+            text: "التاريخ",
+            align: "center",
+            value: "created_at",
             sortable: false,
           },
           {
-            text: 'التحكم',
-            value: 'actions',
+            text: "التحكم",
+            value: "actions",
             sortable: false,
-            align: 'center',
+            align: "center",
           },
-        ]
+        ];
       } else {
         return [
           {
-            text: '#',
-            align: 'center',
-            value: 'id',
+            text: "#",
+            align: "center",
+            value: "id",
             sortable: true,
           },
           {
-            text: 'Reporter',
-            align: 'center',
-            value: 'from',
+            text: "Reporter",
+            align: "center",
+            value: "from",
             sortable: false,
           },
           {
-            text: 'Reported',
-            align: 'center',
-            value: 'to',
+            text: "Reported",
+            align: "center",
+            value: "to",
             sortable: false,
           },
           {
-            text: 'Report Reason',
-            align: 'center',
-            value: 'report_reason',
+            text: "Report Reason",
+            align: "center",
+            value: "report_reason",
             sortable: false,
           },
           {
-            text: 'Actions',
-            value: 'actions',
+            text: "Actions",
+            value: "actions",
             sortable: false,
-            align: 'center',
+            align: "center",
           },
-        ]
+        ];
       }
     },
   },
@@ -317,8 +317,8 @@ export default {
     // ===== Search Method =====
     filterClick(word) {
       if (!this.loading) {
-        this.search = word
-        this.helper_filterSearch()
+        this.search = word;
+        this.helper_filterSearch();
       }
     },
 
@@ -326,89 +326,89 @@ export default {
 
     // ===== Toggle Report Reason Modal =====
     controlReportReasonModalModal(selectedReportReason) {
-      this.reportReasonToShow = selectedReportReason
-      this.reportReasonModalIsOpen = !this.reportReasonModalIsOpen
+      this.reportReasonToShow = selectedReportReason;
+      this.reportReasonModalIsOpen = !this.reportReasonModalIsOpen;
     },
 
     // ==================== Start CRUD ====================
     addItem() {
-      this.$router.push({ path: '/notifications/add' })
+      this.$router.push({ path: "/notifications/add" });
     },
     showItem(item) {
-      this.$router.push({ path: '/notifications/show/' + item.id })
+      this.$router.push({ path: "/notifications/show/" + item.id });
     },
     editItem(item) {
-      this.$router.push({ path: '/notifications/edit/' + item.id })
+      this.$router.push({ path: "/notifications/edit/" + item.id });
     },
     // ===== Delete
     deleteItem(item) {
-      this.dialogDelete = true
-      this.itemtoDelete = item
+      this.dialogDelete = true;
+      this.itemtoDelete = item;
     },
     deleteItemConfirm() {
       this.$axios({
-        method: 'DELETE',
+        method: "DELETE",
         url: `notifications/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
-            return item.id != this.itemtoDelete.id
-          })
-          this.dialogDelete = false
+            return item.id != this.itemtoDelete.id;
+          });
+          this.dialogDelete = false;
           this.$iziToast.success({
             timeout: 2000,
-            message: this.$t('deleteSuccess'),
-            position: 'bottomRight',
-          })
+            message: this.$t("deleteSuccess"),
+            position: "bottomRight",
+          });
         })
         .catch((err) => {
-          this.dialogDelete = false
+          this.dialogDelete = false;
           this.$iziToast.error({
             timeout: 2000,
             message: err.response.data.message,
-            position: 'bottomRight',
-          })
-        })
+            position: "bottomRight",
+          });
+        });
     },
     // ==================== End CRUD ====================
 
     // Set Rows
     setRows() {
-      this.loading = true
+      this.loading = true;
       this.$axios({
-        method: 'GET',
-        url: 'notifications',
+        method: "GET",
+        url: "notifications",
         params: {
           page: this.paginations.current_page,
         },
       })
         .then((res) => {
-          this.loading = false
-          this.paginations.last_page = res.data.meta.last_page
-          this.paginations.items_per_page = res.data.meta.per_page
+          this.loading = false;
+          this.paginations.last_page = res.data.meta.last_page;
+          this.paginations.items_per_page = res.data.meta.per_page;
 
-          this.rows = res.data.data
+          this.rows = res.data.data;
 
-          this.statisticsItem.number = res.data.meta.total
+          this.statisticsItem.number = res.data.meta.total;
         })
         .catch(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     fetchData(e) {
-      this.$router.replace({ query: { page: e } })
-      this.setRows()
+      this.$router.replace({ query: { page: e } });
+      this.setRows();
     },
   },
   created() {
     if (this.$route.query.page) {
-      this.paginations.current_page = +this.$route.query.page
+      this.paginations.current_page = +this.$route.query.page;
     }
-    this.setRows()
+    this.setRows();
   },
 
   // ======= hooks
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

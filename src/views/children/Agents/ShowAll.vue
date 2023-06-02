@@ -44,7 +44,7 @@
             <!-- ================== You Can use any slots you want ================== -->
             <!-- Select no data State -->
             <template v-slot:no-data>
-              {{ $t('table.noData') }}
+              {{ $t("table.noData") }}
             </template>
 
             <!-- avatar -->
@@ -62,8 +62,11 @@
                 class="status"
                 :class="item.is_expired ? 'success' : 'canceled'"
               >
-                {{ item.is_expired ? $t('yes') : $t('no') }}
+                {{ item.is_expired ? $t("yes") : $t("no") }}
               </span>
+            </template>
+            <template v-slot:[`item.index`]="{ index }">
+              <span>{{ index + 1 }}</span>
             </template>
 
             <!-- Select actions-->
@@ -89,15 +92,15 @@
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
                   <v-card-title class="text-h5 justify-center">
-                    {{ $t('table.deletedialog.areYouSure') }}
+                    {{ $t("table.deletedialog.areYouSure") }}
                   </v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="#1B5E20" @click="deleteItemConfirm">
-                      {{ $t('table.deletedialog.ok') }}
+                      {{ $t("table.deletedialog.ok") }}
                     </v-btn>
                     <v-btn color="#F44336" @click="dialogDelete = false">
-                      {{ $t('table.deletedialog.cancel') }}
+                      {{ $t("table.deletedialog.cancel") }}
                     </v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
@@ -106,7 +109,22 @@
 
               <!-- Add & Delete -->
               <v-row>
-                <v-col cols="12" sm="8"></v-col>
+                <v-col cols="12">
+                  <v-tabs fixed-tabs dark class="pt-0 mb-2">
+                    <v-tab
+                      exact-active-class="v-tab-active"
+                      to="/agents/show-all?type=required_agent_or_distrebutor"
+                    >
+                      مطلوب (وكيل / موزع)
+                    </v-tab>
+                    <v-tab
+                      exact-active-class="v-tab-active"
+                      to="/agents/show-all?type=potential_agent_or_potential_distrebutor"
+                    >
+                      وكيل محتمل / موزع محتمل
+                    </v-tab>
+                  </v-tabs>
+                </v-col>
               </v-row>
             </template>
             <!-- ======================== End Top Section ======================== -->
@@ -149,7 +167,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -159,19 +177,19 @@ export default {
       // ========== Breadcrumbs
       items: [
         {
-          text: this.$t('breadcrumb.mainPage'),
+          text: this.$t("breadcrumb.mainPage"),
           disabled: false,
-          href: '/',
+          href: "/",
         },
         {
-          text: this.$t('breadcrumb.agents.title'),
+          text: this.$t("breadcrumb.agents.title"),
           disabled: false,
-          href: '/agents/show-all',
+          href: "/agents/show-all",
         },
         {
-          text: this.$t('breadcrumb.agents.all'),
+          text: this.$t("breadcrumb.agents.all"),
           disabled: true,
-          href: '',
+          href: "",
         },
       ],
 
@@ -179,7 +197,7 @@ export default {
       statisticsItem: {},
 
       // ========== Top Section
-      search: '',
+      search: "",
 
       // ========== dialog Status
       dialogDelete: false,
@@ -188,11 +206,11 @@ export default {
       // ========== Model
       model_1: {
         show_model: false,
-        model_img_src: '',
+        model_img_src: "",
       },
 
       // ========== Body Section
-      calories: '',
+      calories: "",
 
       // ========== Your Data
       rows: [], // injected in created
@@ -206,131 +224,142 @@ export default {
 
       // ========== Loding
       loading: false,
-    }
+    };
   },
 
   computed: {
     ...mapGetters({
-      lang: 'lang_module/lang',
+      lang: "lang_module/lang",
     }),
 
     headers() {
-      if (this.lang == 'ar') {
+      if (this.lang == "ar") {
         return [
           {
-            text: '#',
-            align: 'center',
-            value: 'id',
+            text: "#",
+            align: "center",
+            value: "index",
             sortable: true,
           },
           {
-            text: 'صوره',
-            align: 'center',
-            value: 'agent_images',
+            text: "صوره",
+            align: "center",
+            value: "agent_images",
             sortable: false,
           },
           {
-            text: 'الاسم',
-            align: 'center',
-            value: 'title',
+            text: "الاسم",
+            align: "center",
+            value: "title",
             sortable: false,
           },
           {
-            text: 'الوصف',
-            align: 'center',
-            value: 'desc',
+            text: "الوصف",
+            align: "center",
+            value: "desc",
             sortable: false,
           },
           {
-            text: 'اسم المنتج',
-            align: 'center',
-            value: 'product_name',
+            text: "اسم المنتج",
+            align: "center",
+            value: "product_name",
             sortable: false,
           },
           {
-            text: 'تاريخ الانتهاء',
-            align: 'center',
-            value: 'expiry_date',
+            text: "تاريخ الانتهاء",
+            align: "center",
+            value: "expiry_date",
             sortable: false,
           },
           {
-            text: 'منتهي؟',
-            align: 'center',
-            value: 'is_expired',
+            text: "منتهي؟",
+            align: "center",
+            value: "is_expired",
             sortable: false,
           },
 
           {
-            text: 'الحالة',
-            align: 'center',
-            value: 'status',
+            text: "الحالة",
+            align: "center",
+            value: "status",
             sortable: false,
           },
 
           {
-            text: 'التحكم',
-            value: 'actions',
+            text: "التحكم",
+            value: "actions",
             sortable: false,
-            align: 'center',
+            align: "center",
           },
-        ]
+        ];
       } else {
         return [
           {
-            text: '#',
-            align: 'center',
-            value: 'id',
+            text: "#",
+            align: "center",
+            value: "id",
             sortable: true,
           },
           {
-            text: 'Flag',
-            align: 'center',
-            value: 'image',
+            text: "Flag",
+            align: "center",
+            value: "image",
             sortable: false,
           },
           {
-            text: 'Name',
-            align: 'center',
-            value: 'ar.name',
+            text: "Name",
+            align: "center",
+            value: "ar.name",
             sortable: false,
           },
           {
-            text: 'Name (En)',
-            align: 'center',
-            value: 'en.name',
+            text: "Name (En)",
+            align: "center",
+            value: "en.name",
             sortable: false,
           },
           {
-            text: 'Short Name',
-            align: 'center',
-            value: 'short_name',
+            text: "Short Name",
+            align: "center",
+            value: "short_name",
             sortable: false,
           },
           {
-            text: 'Phone Code',
-            align: 'center',
-            value: 'phonecode',
+            text: "Phone Code",
+            align: "center",
+            value: "phonecode",
             sortable: false,
           },
           {
-            text: 'Currency (Ar)',
-            align: 'center',
-            value: 'ar.currency',
+            text: "Currency (Ar)",
+            align: "center",
+            value: "ar.currency",
             sortable: false,
           },
           {
-            text: 'Currency (En)',
-            align: 'center',
-            value: 'en.currency',
+            text: "Currency (En)",
+            align: "center",
+            value: "en.currency",
             sortable: false,
           },
           {
-            text: 'Actions',
-            value: 'actions',
+            text: "Actions",
+            value: "actions",
             sortable: false,
-            align: 'center',
+            align: "center",
           },
-        ]
+        ];
+      }
+    },
+  },
+  watch: {
+    [`$route`]() {
+      if (this.$route.query.page) {
+        this.paginations.current_page = +this.$route.query.page;
+        this.setRows();
+      } else {
+        this.paginations.current_page = 1;
+        this.setRows();
       }
     },
   },
@@ -339,98 +368,141 @@ export default {
     // ===== Search Method =====
     filterClick(word) {
       if (!this.loading) {
-        this.search = word
-        this.helper_filterSearch()
+        this.search = word;
+        this.helper_filterSearch();
       }
     },
 
     // img Model
     show_model_1(e) {
-      this.model_1.model_img_src = e.target.src
-      this.model_1.show_model = true
+      this.model_1.model_img_src = e.target.src;
+      this.model_1.show_model = true;
     },
 
     // ==================== Start CRUD ====================
     addItem() {
-      this.$router.push({ path: '/agents/add' })
+      this.$router.push({ path: "/agents/add" });
     },
     showItem(item) {
-      this.$router.push({ path: '/agents/show/' + item.id })
+      this.$router.push({ path: "/agents/show/" + item.id });
     },
     editItem(item) {
-      this.$router.push({ path: '/agents/edit/' + item.id })
+      this.$router.push({ path: "/agents/edit/" + item.id });
     },
     // ===== Delete
     deleteItem(item) {
-      this.dialogDelete = true
-      this.itemtoDelete = item
+      this.dialogDelete = true;
+      this.itemtoDelete = item;
     },
     deleteItemConfirm() {
       this.$axios({
-        method: 'DELETE',
+        method: "DELETE",
         url: `agents/${this.itemtoDelete.id}`,
       })
         .then(() => {
           this.rows = this.rows.filter((item) => {
-            return item.id != this.itemtoDelete.id
-          })
-          this.dialogDelete = false
+            return item.id != this.itemtoDelete.id;
+          });
+          this.dialogDelete = false;
           this.$iziToast.success({
             timeout: 2000,
-            message: this.$t('deleteSuccess'),
-            position: 'bottomRight',
-          })
+            message: this.$t("deleteSuccess"),
+            position: "bottomRight",
+          });
         })
         .catch((err) => {
-          this.dialogDelete = false
+          this.dialogDelete = false;
           this.$iziToast.error({
             timeout: 2000,
             message: err.response.data.message,
-            position: 'bottomRight',
-          })
-        })
+            position: "bottomRight",
+          });
+        });
     },
     // ==================== End CRUD ====================
 
     // Set Rows
     setRows() {
-      this.loading = true
-      this.loaderPage = true
+      this.loading = true;
+      this.loaderPage = true;
       this.$axios({
-        method: 'GET',
-        url: 'agents',
-        params: { page: this.paginations.current_page },
+        method: "GET",
+        url: "agents",
+        params: {
+          page: this.paginations.current_page,
+
+          type: this.$route.query.type,
+        },
       })
         .then((res) => {
-          this.paginations.last_page = res.data.meta.last_page
-          this.paginations.items_per_page = res.data.meta.per_page
+          this.paginations.last_page = res.data.meta.last_page;
+          this.paginations.items_per_page = res.data.meta.per_page;
 
-          this.rows = res.data.data
+          this.rows = res.data.data;
           // console.log(res.data.data)
-          this.statisticsItem.number = res.data.meta.total
+          this.statisticsItem.number = res.data.meta.total;
 
-          this.loaderPage = false
-          this.loading = false
+          this.loaderPage = false;
+          this.loading = false;
         })
         .catch((err) => {
-          this.loading = false
-          this.loaderPage = false
-        })
+          this.loading = false;
+          this.loaderPage = false;
+        });
     },
     fetchData(e) {
-      this.$router.replace({ query: { page: e } })
-      this.setRows()
+      this.$router.replace({ query: { page: e } });
+      this.setRows();
     },
   },
   created() {
     if (this.$route.query.page) {
-      this.paginations.current_page = +this.$route.query.page
+      this.paginations.current_page = +this.$route.query.page;
     }
-    this.setRows()
+    this.setRows();
   },
 
   // ======= hooks
-}
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.v-item-group {
+  background-color: transparent !important;
+  box-shadow: 0px 5px 14px rgb(0 0 0 / 5%);
+  .v-tabs-bar__content {
+    .v-tab {
+      color: var(--mainColor-2) !important;
+      &.v-tab-active {
+        background: linear-gradient(97.46deg, #2d70ab -1.53%, #2d70ab 132.35%);
+        color: #fff !important;
+        border-radius: 10px;
+      }
+    }
+  }
+  .v-tabs {
+    .v-tab {
+      letter-spacing: normal !important;
+      // color: var(--main) !important;
+      // &.v-tab {
+      //   color: var(--main) !important;
+      // }
+    }
+    background: linear-gradient(
+      97.46deg,
+      #322176 -1.53%,
+      #2d70ab 132.35%
+    ) !important;
+  }
+  &:not(.v-tab--active) {
+    color: transparent !important;
+  }
+}
+._actions {
+  > button {
+    &:first-child {
+      margin-inline-end: 5px;
+    }
+  }
+}
+</style>

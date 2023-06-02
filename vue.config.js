@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/tender_dash' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/dashboard' : '/',
 
   pluginOptions: {
     i18n: {
